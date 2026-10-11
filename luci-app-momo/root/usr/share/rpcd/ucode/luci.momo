@@ -15,14 +15,19 @@ const methods = {
 		call: function() {
 			let process;
 			let app = '';
-			if (system('command -v opkg') == 0) {
-				process = popen(`opkg list-installed luci-app-momo | cut -d ' ' -f 3`);
+			// apk is checked first because a 25.12 based system can still ship
+			// opkg as a compatibility shim, and that shim does not necessarily
+			// report what apk has actually installed
+			if (system('command -v apk') == 0) {
+				// strip the package name instead of cutting on the dashes, the
+				// name has dashes of its own and the version carries a -r suffix
+				process = popen(`apk list -I luci-app-momo | cut -d ' ' -f 1 | sed 's/^luci-app-momo-//'`);
 				if (process) {
 					app = trim(process.read('all'));
 					process.close();
 				}
-			} else if (system('command -v apk') == 0) {
-				process = popen(`apk list -I luci-app-momo | cut -d ' ' -f 1 | cut -d '-' -f 4`);
+			} else if (system('command -v opkg') == 0) {
+				process = popen(`opkg list-installed luci-app-momo | cut -d ' ' -f 3`);
 				if (process) {
 					app = trim(process.read('all'));
 					process.close();
