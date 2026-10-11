@@ -80,8 +80,11 @@ apk add luci-i18n-momo-zh-cn
 
 ### B. Install From Release
 
+Downloads the packages from the latest GitHub release. No feed is configured and no
+signing key is trusted, so this works out of the box.
+
 ```shell
-wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/install.sh | ash
+wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/install-release.sh | ash
 ```
 
 ### C. Install The Packages Directly

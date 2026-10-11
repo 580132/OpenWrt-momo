@@ -78,8 +78,11 @@ apk add luci-i18n-momo-zh-cn
 
 ### B. 从发行版安装
 
+从最新的 GitHub 发行版直接下载安装包，**不需要添加软件源，也不需要信任任何签名密钥**，
+开箱即用。
+
 ```shell
-wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/install.sh | ash
+wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/install-release.sh | ash
 ```
 
 ### C. 直接安装安装包
