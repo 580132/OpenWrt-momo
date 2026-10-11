@@ -141,6 +141,15 @@ momo           2026.06.03-r2
 of the upstream one. Keeping the upstream version visible is deliberate: it is
 what tells you at a glance which upstream release the changes are based on.
 
+**Every change to a file that ships inside a package must bump `PKG_RELEASE`.**
+Without it the package keeps the version a user already has, the package manager
+reports it as up to date and skips it, and the new files never reach the device.
+This applies to `momo` (`momo.conf`, `files/`) and to `luci-app-momo` (`htdocs/`,
+`root/`), independently of each other.
+
+The symptom is an install that reports success but lists no upgrade, for example
+`OK: 230.0 MiB in 330 packages` with no `Upgrading ...` line above it.
+
 ### Syncing With Upstream
 
 When upstream publishes a new release the fork has to follow it, otherwise the
