@@ -149,7 +149,10 @@ return view.extend({
             momo.version(),
             momo.status(),
             momo.listProfiles(),
-            momo.coreInfo()
+            // resolveDefault so that an unavailable procedure only costs the
+            // Core Update section instead of aborting the whole page, which is
+            // what Promise.all would do on a rejected call
+            L.resolveDefault(momo.coreInfo(), {})
         ]);
     },
     render: function (data) {
