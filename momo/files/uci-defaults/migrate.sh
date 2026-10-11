@@ -54,6 +54,11 @@ section_mixin=$(uci -q get momo.mixin); [ -z "$section_mixin" ] && {
 # since v1.2.1
 config_clear_at_stop=$(uci -q get momo.log.clear_at_stop); [ -z "$config_clear_at_stop" ] && uci set momo.log.clear_at_stop=1
 
+# core update
+# the Core Update table section renders one row per existing uci section of
+# its type, so it needs a backing section just like the Status one does
+section_core_update=$(uci -q get momo.core_update); [ -z "$section_core_update" ] && uci set momo.core_update=core_update
+
 # commit
 uci commit momo
 
