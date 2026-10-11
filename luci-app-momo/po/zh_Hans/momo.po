@@ -266,6 +266,10 @@ msgstr "Fake-IP Ping 劫持"
 msgid "Fast Reload"
 msgstr "快速重载"
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:1
+msgid "Fetching the release information, please wait..."
+msgstr "正在获取发布信息，请稍候…"
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:325
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:31
 msgid "File:"
@@ -622,13 +626,13 @@ msgstr "核心更新超时。请查看插件日志了解详情。"
 msgid "The release information has been fetched."
 msgstr "已获取版本信息。"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:298
-msgid "The sing-box core has been updated to the latest preview release."
-msgstr "sing-box 核心已更新到最新预览版。"
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:1
+msgid "The sing-box core is already at the latest preview release, or it has been updated to it."
+msgstr "单核已是最新预览版，或已升级到最新预览版。"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:283
-msgid "The sing-box core has been updated to the latest stable release."
-msgstr "sing-box 核心已更新到最新稳定版。"
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:1
+msgid "The sing-box core is already at the latest stable release, or it has been updated to it."
+msgstr "单核已是最新稳定版，或已升级到最新稳定版。"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:291
 msgid "The sing-box core will be updated to the latest preview release. Preview releases may be unstable."

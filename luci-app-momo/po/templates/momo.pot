@@ -259,6 +259,10 @@ msgstr ""
 msgid "Fast Reload"
 msgstr ""
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:1
+msgid "Fetching the release information, please wait..."
+msgstr ""
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:325
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:31
 msgid "File:"
@@ -615,12 +619,12 @@ msgstr ""
 msgid "The release information has been fetched."
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:298
-msgid "The sing-box core has been updated to the latest preview release."
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:1
+msgid "The sing-box core is already at the latest preview release, or it has been updated to it."
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:283
-msgid "The sing-box core has been updated to the latest stable release."
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:1
+msgid "The sing-box core is already at the latest stable release, or it has been updated to it."
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:291

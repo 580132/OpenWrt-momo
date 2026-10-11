@@ -41,7 +41,9 @@ function setOptionValue(map, section_id, name, value) {
 }
 
 function refreshCoreInfo() {
-    return L.resolveDefault(momo.coreInfo(), {}).then(function (info) {
+    return guarded(function () {
+        return momo.coreInfo();
+    }).then(function (info) {
         updateCoreVersion(info.current_version ?? '');
     });
 }
@@ -50,15 +52,60 @@ function errorMessage(error) {
     return String(error?.message ?? error ?? _('Unknown error'));
 }
 
+// Fetches the published versions and writes them into the form, using a dialog
+// of its own so that nothing about it depends on the button handler's promise.
+function runCoreCheck(map, section_id) {
+    ui.showModal(_('Check for Updates'), [
+        E('p', {}, [_('Fetching the release information, please wait...')])
+    ]);
+
+    const done = function (error) {
+        ui.hideModal();
+        if (error) {
+            ui.addNotification(null, E('p', [_('Error:'), ' ', errorMessage(error)]), 'danger');
+        } else {
+            ui.addNotification(null, E('p', [_('The release information has been fetched.')]), 'info');
+        }
+    };
+
+    guarded(function () {
+        return momo.checkCoreUpdate();
+    }).then(function (versions) {
+        latestVersions.stable = versions.stable ?? '';
+        latestVersions.preview = versions.preview ?? '';
+        setOptionValue(map, section_id, '_latest_stable_version', latestVersions.stable);
+        setOptionValue(map, section_id, '_latest_preview_version', latestVersions.preview);
+        if (!latestVersions.stable && !latestVersions.preview) {
+            throw new Error(_('Failed to reach GitHub. The release list could not be fetched, please check the network.'));
+        }
+        done();
+    }, function (error) {
+        done(error);
+    });
+}
+
 // form.Button wires onclick through ui.createHandlerFn(), which does
-//     Promise.resolve(onclick(...)).finally(clear spinner)
-// so a handler that throws synchronously leaves the button spinning forever
-// with no error shown, because Promise.resolve is never reached. Wrapping the
-// call in a Promise moves any such throw into a rejection, which settles.
+//     t.classList.add('spinning'); t.disabled = true;
+//     Promise.resolve(onclick(...)).finally(() => { t.classList.remove('spinning'); ... });
+// so the button only leaves its loading state when the returned promise settles,
+// and a handler that throws synchronously never gets that far. That internal
+// behaviour is outside our control, so no onclick below returns a promise.
 function guarded(call) {
     return new Promise(function (resolve) {
         resolve(call());
     });
+}
+
+// Runs work that reports its own outcome, from a button handler that returns
+// nothing. Returning undefined settles on the next microtask, which clears the
+// button's loading state immediately, and everything the user needs to see is
+// carried by the notification or the progress dialog instead.
+function detached(fn) {
+    try {
+        fn();
+    } catch (error) {
+        ui.addNotification(null, E('p', [_('Error:'), ' ', errorMessage(error)]), 'danger');
+    }
 }
 
 // Buttons are wrapped by ui.createHandlerFn(), which swallows rejections,
@@ -278,51 +325,47 @@ return view.extend({
         o.inputstyle = 'action';
         o.inputtitle = _('Check for Updates');
         o.onclick = function (_, section_id) {
-            return report(guarded(function () {
-                return momo.checkCoreUpdate();
-            }).then(function (versions) {
-                latestVersions.stable = versions.stable ?? '';
-                latestVersions.preview = versions.preview ?? '';
-                setOptionValue(m, section_id, '_latest_stable_version', latestVersions.stable);
-                setOptionValue(m, section_id, '_latest_preview_version', latestVersions.preview);
-                if (!latestVersions.stable && !latestVersions.preview) {
-                    throw new Error(_('Failed to reach GitHub. The release list could not be fetched, please check the network.'));
-                }
-            }), _('The release information has been fetched.'));
+            detached(function () {
+                runCoreCheck(m, section_id);
+            });
         };
 
         o = s.option(form.Button, 'update_core_stable');
         o.inputstyle = 'apply';
         o.inputtitle = _('Update To Latest Stable');
         o.onclick = function () {
-            return report(
-                confirmAction(_('Update To Latest Stable'), _('The sing-box core will be updated to the latest stable release. The service will be restarted once the update is complete.'))
-                    .then(function () {
-                        return startCoreUpdate(guarded(function () {
-                            return momo.updateCore('stable');
-                        }));
-                    })
-                    .then(function () {
-                        return refreshCoreInfo();
-                    }),
-                _('The sing-box core has been updated to the latest stable release.'));
+            detached(function () {
+                report(
+                    confirmAction(_('Update To Latest Stable'), _('The sing-box core will be updated to the latest stable release. The service will be restarted once the update is complete.'))
+                        .then(function () {
+                            return startCoreUpdate(guarded(function () {
+                                return momo.updateCore('stable');
+                            }));
+                        })
+                        .then(function () {
+                            return refreshCoreInfo();
+                        }),
+                    _('The sing-box core is already at the latest stable release, or it has been updated to it.'));
+            });
         };
 
         o = s.option(form.Button, 'update_core_preview');
         o.inputstyle = 'action';
         o.inputtitle = _('Update To Latest Preview');
         o.onclick = function () {
-            return report(
-                confirmAction(_('Update To Latest Preview'), _('The sing-box core will be updated to the latest preview release. Preview releases may be unstable.'))
-                    .then(function () {
-                        return startCoreUpdate(guarded(function () {
-                            return momo.updateCore('preview');
-                        }));
-                    })
-                    .then(function () {
-                        return refreshCoreInfo();
-                    }),
-                _('The sing-box core has been updated to the latest preview release.'));
+            detached(function () {
+                report(
+                    confirmAction(_('Update To Latest Preview'), _('The sing-box core will be updated to the latest preview release. Preview releases may be unstable.'))
+                        .then(function () {
+                            return startCoreUpdate(guarded(function () {
+                                return momo.updateCore('preview');
+                            }));
+                        })
+                        .then(function () {
+                            return refreshCoreInfo();
+                        }),
+                    _('The sing-box core is already at the latest preview release, or it has been updated to it.'));
+            });
         };
 
         s = m.section(form.NamedSection, 'config', 'config', _('App Config'));
