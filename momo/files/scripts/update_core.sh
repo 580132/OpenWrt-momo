@@ -31,10 +31,14 @@ fail() {
 }
 
 get_package_manager() {
-	if command -v opkg > /dev/null 2>&1; then
-		echo "opkg"
-	elif command -v apk > /dev/null 2>&1; then
+	# apk is checked first on purpose. OpenWrt since 25.12 ships apk, and opkg
+	# survives only as a compatibility shim whose package database is empty, so
+	# picking opkg there installs against a database that knows nothing about
+	# the package being installed.
+	if command -v apk > /dev/null 2>&1; then
 		echo "apk"
+	elif command -v opkg > /dev/null 2>&1; then
+		echo "opkg"
 	else
 		echo ""
 	fi
@@ -267,7 +271,9 @@ core_install_version() {
 	# check the available space
 	check_free_space "$asset_size" || return 1
 	# download
-	local package_path="$CORE_UPDATE_DIR/package"
+	# keep the real asset name, opkg parses the architecture out of the file
+	# name and rejects anything it cannot parse
+	local package_path="$CORE_UPDATE_DIR/$asset_name"
 	local download_url="$CORE_DOWNLOAD_BASE/$tag/$asset_name"
 	step "Downloading..."
 	if ! curl -s -f -m 1800 --connect-timeout 15 --retry 3 -L -o "$package_path" "$download_url" > /dev/null 2>&1; then
