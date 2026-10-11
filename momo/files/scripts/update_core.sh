@@ -406,8 +406,21 @@ start_core_update() {
 		log "Core" "Another core update is already running."
 		return 1
 	fi
-	nohup "$0" "$action" "$@" --locked < /dev/null > /dev/null 2>&1 &
-	echo "$!" > "$CORE_UPDATE_LOCK_PATH/pid"
+	# nohup is not part of every busybox build on OpenWrt, so detach without
+	# it; a signal set to be ignored here survives the exec of the worker
+	trap '' HUP
+	"$0" "$action" "$@" --locked < /dev/null > /dev/null 2>&1 &
+	local worker_pid="$!"
+	echo "$worker_pid" > "$CORE_UPDATE_LOCK_PATH/pid"
+	# the worker has to be confirmed alive before reporting success, otherwise
+	# a spawn that silently fails leaves the lock held and the caller polling a
+	# job that will never run and never release it
+	sleep 1
+	if ! kill -0 "$worker_pid" 2> /dev/null && [ ! -f "$CORE_UPDATE_RESULT_PATH" ]; then
+		release_lock
+		log "Core" "Failed to start the core update worker."
+		return 1
+	fi
 	return 0
 }
 
