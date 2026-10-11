@@ -6,11 +6,8 @@
 
 CORE_REPO="SagerNet/sing-box"
 CORE_API_BASE="https://api.github.com/repos/$CORE_REPO"
+CORE_RELEASES_URL="https://github.com/$CORE_REPO/releases"
 CORE_DOWNLOAD_BASE="https://github.com/$CORE_REPO/releases/download"
-
-# this fork
-MOMO_REPO="580132/OpenWrt-momo"
-MOMO_RELEASES_URL="https://github.com/$MOMO_REPO/releases"
 
 # The check runs inside a single rpcd call, and LuCI abandons rpc after 20
 # seconds by default, so these are kept far below the generous timeouts the
@@ -351,27 +348,27 @@ core_info() {
 		"$package_manager" "$extension" "$target_arch" "$current_version" "$previous_version"
 }
 
-# prints the tag of the latest stable release
+# prints the version of the latest stable sing-box release
 # /releases/latest redirects to the newest non prerelease, which avoids the
 # api host entirely and is far more likely to be reachable
 get_latest_stable_tag() {
 	local url
-	url=$(curl -s -f -m $CORE_CHECK_MAX_TIME --connect-timeout $CORE_CHECK_CONNECT_TIME -L -o /dev/null -w '%{url_effective}' "$MOMO_RELEASES_URL/latest" 2> /dev/null)
+	url=$(curl -s -f -m $CORE_CHECK_MAX_TIME --connect-timeout $CORE_CHECK_CONNECT_TIME -L -o /dev/null -w '%{url_effective}' "$CORE_RELEASES_URL/latest" 2> /dev/null)
 	url="${url##*/tag/}"
 	case "$url" in
-		v*) echo "$url" ;;
+		v*) echo "${url#v}" ;;
 		*) ;;
 	esac
 }
 
-# prints the tag of the latest preview release
+# prints the version of the latest preview sing-box release
 # the atom feed lists recent releases newest first, so the first entry tagged
 # as a prerelease is the newest one
 get_latest_preview_tag() {
-	curl -s -f -m $CORE_CHECK_MAX_TIME --connect-timeout $CORE_CHECK_CONNECT_TIME -L "$MOMO_RELEASES_URL.atom" 2> /dev/null \
-		| grep -o "$MOMO_RELEASES_URL/tag/v[^\"<]*" \
+	curl -s -f -m $CORE_CHECK_MAX_TIME --connect-timeout $CORE_CHECK_CONNECT_TIME -L "$CORE_RELEASES_URL.atom" 2> /dev/null \
+		| grep -o "$CORE_RELEASES_URL/tag/v[^\"<]*" \
 		| grep -m 1 -E -- '-(alpha|beta|rc)' \
-		| sed "s#.*/tag/##"
+		| sed "s#.*/tag/v##"
 }
 
 # prints the latest tag of each channel as json
