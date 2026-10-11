@@ -30,8 +30,19 @@ case "$DISTRIB_RELEASE" in
 		;;
 esac
 
+# supported targets
+# keep in sync with the matrix in .github/workflows/release-packages.yml
+supported_branch="openwrt-25.12"
+supported_arch="x86_64"
+
+if [ "$branch" != "$supported_branch" ] || [ "$arch" != "$supported_arch" ]; then
+	echo "no build available for $branch/$arch"
+	echo "this fork only builds $supported_branch/$supported_arch"
+	exit 1
+fi
+
 # feed url
-repository_url="https://momomomo.pages.dev"
+repository_url="https://580132.github.io/OpenWrt-momo"
 feed_url="$repository_url/$branch/$arch/momo"
 
 if [ -x "/bin/opkg" ]; then

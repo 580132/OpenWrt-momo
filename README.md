@@ -52,13 +52,16 @@ Notes:
 
 ## Install & Update
 
+> **Supported targets:** this fork only builds `x86_64` on `openwrt-25.12`. Other
+> architectures and releases are not published to the feed.
+
 ### A. Install From Feed (Recommended)
 
 1. Add Feed
 
 ```shell
 # only needs to be run once
-wget -O - https://github.com/nikkinikki-org/OpenWrt-momo/raw/refs/heads/main/feed.sh | ash
+wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/feed.sh | ash
 ```
 
 2. Install
@@ -78,13 +81,13 @@ apk add luci-i18n-momo-zh-cn
 ### B. Install From Release
 
 ```shell
-wget -O - https://github.com/nikkinikki-org/OpenWrt-momo/raw/refs/heads/main/install.sh | ash
+wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/install.sh | ash
 ```
 
 ## Uninstall & Reset
 
 ```shell
-wget -O - https://github.com/nikkinikki-org/OpenWrt-momo/raw/refs/heads/main/uninstall.sh | ash
+wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/uninstall.sh | ash
 ```
 
 ## How To Use
@@ -120,7 +123,7 @@ release number at `2`.
 
 ```shell
 # add feed
-echo "src-git momo https://github.com/nikkinikki-org/OpenWrt-momo.git;main" >> "feeds.conf.default"
+echo "src-git momo https://github.com/580132/OpenWrt-momo.git;main" >> "feeds.conf.default"
 # update & install feeds
 ./scripts/feeds update -a
 ./scripts/feeds install -a

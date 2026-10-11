@@ -51,13 +51,15 @@
 
 ## 安装和更新
 
+> **支持的平台：** 本 fork 目前只构建 `openwrt-25.12` 的 `x86_64`，其他架构和版本不会发布到软件源。
+
 ### A. 从软件源安装（推荐）
 
 1. 添加源
 
 ```shell
 # 只需运行一次
-wget -O - https://github.com/nikkinikki-org/OpenWrt-momo/raw/refs/heads/main/feed.sh | ash
+wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/feed.sh | ash
 ```
 
 2. 安装
@@ -77,13 +79,13 @@ apk add luci-i18n-momo-zh-cn
 ### B. 从发行版安装
 
 ```shell
-wget -O - https://github.com/nikkinikki-org/OpenWrt-momo/raw/refs/heads/main/install.sh | ash
+wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/install.sh | ash
 ```
 
 ## 卸载并重置
 
 ```shell
-wget -O - https://github.com/nikkinikki-org/OpenWrt-momo/raw/refs/heads/main/uninstall.sh | ash
+wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/uninstall.sh | ash
 ```
 
 ## 如何使用
@@ -118,7 +120,7 @@ momo           2026.06.03-r2
 
 ```shell
 # 添加源
-echo "src-git momo https://github.com/nikkinikki-org/OpenWrt-momo.git;main" >> "feeds.conf.default"
+echo "src-git momo https://github.com/580132/OpenWrt-momo.git;main" >> "feeds.conf.default"
 # 更新并安装源
 ./scripts/feeds update -a
 ./scripts/feeds install -a
