@@ -450,10 +450,6 @@ msgstr "优先 IPv4"
 msgid "Prefer IPv6"
 msgstr "优先 IPv6"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:232
-msgid "Previous Core Version"
-msgstr "上一个核心版本"
-
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:21
 #: applications/luci-app-momo/root/usr/share/luci/menu.d/luci-app-momo.json:21
 msgid "Profile"
@@ -501,11 +497,6 @@ msgstr "IPv6 保留地址"
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:203
 msgid "Restart Service"
 msgstr "重启服务"
-
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:303
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:306
-msgid "Rollback Core"
-msgstr "回滚核心"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:64
 msgid "Router Proxy"
@@ -627,10 +618,6 @@ msgstr "核心正在更新中，这可能需要几分钟。"
 msgid "The release information has been fetched."
 msgstr "已获取版本信息。"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:313
-msgid "The sing-box core has been rolled back to the previous version."
-msgstr "sing-box 核心已回滚到上一个版本。"
-
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:298
 msgid "The sing-box core has been updated to the latest preview release."
 msgstr "sing-box 核心已更新到最新预览版。"
@@ -638,10 +625,6 @@ msgstr "sing-box 核心已更新到最新预览版。"
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:283
 msgid "The sing-box core has been updated to the latest stable release."
 msgstr "sing-box 核心已更新到最新稳定版。"
-
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:306
-msgid "The sing-box core will be rolled back to the previous version. The service will be restarted once it is complete."
-msgstr "sing-box 核心将回滚到上一个版本，完成后将重启服务。"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:291
 msgid "The sing-box core will be updated to the latest preview release. Preview releases may be unstable."

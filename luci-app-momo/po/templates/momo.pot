@@ -443,10 +443,6 @@ msgstr ""
 msgid "Prefer IPv6"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:232
-msgid "Previous Core Version"
-msgstr ""
-
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:21
 #: applications/luci-app-momo/root/usr/share/luci/menu.d/luci-app-momo.json:21
 msgid "Profile"
@@ -493,11 +489,6 @@ msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:203
 msgid "Restart Service"
-msgstr ""
-
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:303
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:306
-msgid "Rollback Core"
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:64
@@ -620,20 +611,12 @@ msgstr ""
 msgid "The release information has been fetched."
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:313
-msgid "The sing-box core has been rolled back to the previous version."
-msgstr ""
-
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:298
 msgid "The sing-box core has been updated to the latest preview release."
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:283
 msgid "The sing-box core has been updated to the latest stable release."
-msgstr ""
-
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:306
-msgid "The sing-box core will be rolled back to the previous version. The service will be restarted once it is complete."
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:291
