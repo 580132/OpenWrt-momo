@@ -11,6 +11,8 @@ jobs:
     name: ${{ matrix.arch }}-${{ matrix.branch }}
     runs-on: ubuntu-latest
     continue-on-error: true
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
