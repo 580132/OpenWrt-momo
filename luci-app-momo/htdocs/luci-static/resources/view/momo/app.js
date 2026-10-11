@@ -54,7 +54,7 @@ function errorMessage(error) {
 
 // Fetches the published versions and writes them into the form, using a dialog
 // of its own so that nothing about it depends on the button handler's promise.
-function runCoreCheck(map, section_id) {
+function runCoreCheck(map, section_id, latestVersions) {
     ui.showModal(_('Check for Updates'), [
         E('p', {}, [_('Fetching the release information, please wait...')])
     ]);
@@ -79,7 +79,7 @@ function runCoreCheck(map, section_id) {
             throw new Error(_('Failed to reach GitHub. The release list could not be fetched, please check the network.'));
         }
         done();
-    }, function (error) {
+    }).then(null, function (error) {
         done(error);
     });
 }
@@ -326,7 +326,7 @@ return view.extend({
         o.inputtitle = _('Check for Updates');
         o.onclick = function (_, section_id) {
             detached(function () {
-                runCoreCheck(m, section_id);
+                runCoreCheck(m, section_id, latestVersions);
             });
         };
 
