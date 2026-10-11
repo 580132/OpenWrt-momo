@@ -58,6 +58,9 @@ jobs:
     needs: release
     name: feed
     runs-on: ubuntu-latest
+    # A feed without valid signing keys cannot be installed from, so only
+    # publish it once the keys have actually been configured.
+    if: ${{ secrets.KEY_BUILD_PUB != '' && secrets.PUBLIC_KEY != '' }}
     permissions:
       contents: read
       pages: write

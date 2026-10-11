@@ -84,6 +84,26 @@ apk add luci-i18n-momo-zh-cn
 wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/install.sh | ash
 ```
 
+### C. Install The Packages Directly
+
+Use this if you would rather not add a feed. The packages published with each release
+are unsigned, so `--allow-untrusted` is required to skip signature verification.
+
+```shell
+# download the packages of the latest release
+wget https://github.com/580132/OpenWrt-momo/releases/latest/download/momo-2026.06.03-r2.apk
+wget https://github.com/580132/OpenWrt-momo/releases/latest/download/luci-app-momo-1.2.1-r2.apk
+wget https://github.com/580132/OpenWrt-momo/releases/latest/download/luci-i18n-momo-zh-cn-26.284.47581~d6a2dbc.apk
+
+# install
+apk add --allow-untrusted ./momo-2026.06.03-r2.apk \
+                       ./luci-app-momo-1.2.1-r2.apk \
+                       ./luci-i18n-momo-zh-cn-26.284.47581~d6a2dbc.apk
+```
+
+Dependencies such as `firewall4` and `sing-box` are still fetched from the official
+OpenWrt repositories.
+
 ## Uninstall & Reset
 
 ```shell

@@ -82,6 +82,25 @@ apk add luci-i18n-momo-zh-cn
 wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/install.sh | ash
 ```
 
+### C. 直接安装安装包
+
+不想添加软件源时用这个方式。随发行版发布的安装包**未签名**，因此需要 `--allow-untrusted`
+跳过签名校验。
+
+```shell
+# 下载最新发行版的安装包
+wget https://github.com/580132/OpenWrt-momo/releases/latest/download/momo-2026.06.03-r2.apk
+wget https://github.com/580132/OpenWrt-momo/releases/latest/download/luci-app-momo-1.2.1-r2.apk
+wget https://github.com/580132/OpenWrt-momo/releases/latest/download/luci-i18n-momo-zh-cn-26.284.47581~d6a2dbc.apk
+
+# 安装
+apk add --allow-untrusted ./momo-2026.06.03-r2.apk \
+                       ./luci-app-momo-1.2.1-r2.apk \
+                       ./luci-i18n-momo-zh-cn-26.284.47581~d6a2dbc.apk
+```
+
+`firewall4`、`sing-box` 等依赖仍会从 OpenWrt 官方软件源获取。
+
 ## 卸载并重置
 
 ```shell

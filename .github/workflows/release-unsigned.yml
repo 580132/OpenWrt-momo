@@ -1,0 +1,56 @@
+name: release-unsigned
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    name: ${{ matrix.arch }}-${{ matrix.branch }}
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - x86_64
+        branch:
+          - openwrt-25.12
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      # No KEY_BUILD / PRIVATE_KEY is passed on purpose. The sdk writes those
+      # files only when the variables are non-empty, so the packages come out
+      # unsigned and can be installed with "apk add --allow-untrusted".
+      - name: build
+        uses: openwrt/gh-action-sdk@main
+        env:
+          ARCH: ${{ matrix.arch }}-${{ matrix.branch }}
+          FEEDNAME: momo
+          PACKAGES: luci-app-momo
+          NO_REFRESH_CHECK: true
+
+      - name: collect
+        run: |
+          mkdir -p dist
+          cp -a bin/packages/${{ matrix.arch }}/momo/. dist/
+          ls -l dist
+
+      - name: upload packages
+        uses: actions/upload-artifact@v7
+        with:
+          name: packages_momo_${{ matrix.arch }}-${{ matrix.branch }}
+          path: dist
+
+      - if: github.event_name == 'push' && startsWith(github.ref_name, 'v')
+        name: release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: |
+            dist/*.apk
+            dist/*.ipk
+          fail_on_unmatched_files: false
