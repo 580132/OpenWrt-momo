@@ -13,9 +13,7 @@ jobs:
         arch:
           - x86_64
         branch:
-          - openwrt-24.10
           - openwrt-25.12
-          - SNAPSHOT
 
     steps:
       - name: checkout
