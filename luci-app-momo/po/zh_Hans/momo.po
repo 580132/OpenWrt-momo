@@ -251,7 +251,7 @@ msgid "External Control Config"
 msgstr "外部控制配置"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:266
-msgid "Failed to fetch the release information from GitHub. Please check the network connection."
+msgid "Failed to reach GitHub. The release list could not be fetched, please check the network."
 msgstr "无法从 GitHub 获取版本信息，请检查网络连接。"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:139

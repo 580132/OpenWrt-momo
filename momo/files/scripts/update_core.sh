@@ -8,6 +8,16 @@ CORE_REPO="SagerNet/sing-box"
 CORE_API_BASE="https://api.github.com/repos/$CORE_REPO"
 CORE_DOWNLOAD_BASE="https://github.com/$CORE_REPO/releases/download"
 
+# this fork
+MOMO_REPO="580132/OpenWrt-momo"
+MOMO_RELEASES_URL="https://github.com/$MOMO_REPO/releases"
+
+# The check runs inside a single rpcd call, and LuCI abandons rpc after 20
+# seconds by default, so these are kept far below the generous timeouts the
+# background update job uses.
+CORE_CHECK_MAX_TIME=5
+CORE_CHECK_CONNECT_TIME=3
+
 # minimum free space (in KiB) required on the overlay filesystem to install a new core
 CORE_MIN_FREE_SPACE=131072
 
@@ -341,15 +351,34 @@ core_info() {
 		"$package_manager" "$extension" "$target_arch" "$current_version" "$previous_version"
 }
 
+# prints the tag of the latest stable release
+# /releases/latest redirects to the newest non prerelease, which avoids the
+# api host entirely and is far more likely to be reachable
+get_latest_stable_tag() {
+	local url
+	url=$(curl -s -f -m $CORE_CHECK_MAX_TIME --connect-timeout $CORE_CHECK_CONNECT_TIME -L -o /dev/null -w '%{url_effective}' "$MOMO_RELEASES_URL/latest" 2> /dev/null)
+	url="${url##*/tag/}"
+	case "$url" in
+		v*) echo "$url" ;;
+		*) ;;
+	esac
+}
+
+# prints the tag of the latest preview release
+# the atom feed lists recent releases newest first, so the first entry tagged
+# as a prerelease is the newest one
+get_latest_preview_tag() {
+	curl -s -f -m $CORE_CHECK_MAX_TIME --connect-timeout $CORE_CHECK_CONNECT_TIME -L "$MOMO_RELEASES_URL.atom" 2> /dev/null \
+		| grep -o "$MOMO_RELEASES_URL/tag/v[^\"<]*" \
+		| grep -m 1 -E -- '-(alpha|beta|rc)' \
+		| sed "s#.*/tag/##"
+}
+
 # prints the latest tag of each channel as json
 core_check() {
-	local work_dir="$TEMP_DIR/core_check"
-	rm -rf "$work_dir"
-	mkdir -p "$work_dir"
 	local stable_tag preview_tag
-	stable_tag=$(get_latest_tag "stable" "$work_dir")
-	preview_tag=$(get_latest_tag "preview" "$work_dir")
-	rm -rf "$work_dir"
+	stable_tag=$(get_latest_stable_tag)
+	preview_tag=$(get_latest_preview_tag)
 	printf '{"stable":"%s","preview":"%s"}\n' "$stable_tag" "$preview_tag"
 }
 

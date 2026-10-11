@@ -266,7 +266,7 @@ return view.extend({
                 setOptionValue(m, section_id, '_latest_stable_version', latestVersions.stable);
                 setOptionValue(m, section_id, '_latest_preview_version', latestVersions.preview);
                 if (!latestVersions.stable && !latestVersions.preview) {
-                    return Promise.reject(new Error(_('Failed to fetch the release information from GitHub. Please check the network connection.')));
+                    return Promise.reject(new Error(_('Failed to reach GitHub. The release list could not be fetched, please check the network.')));
                 }
             }), _('The release information has been fetched.'));
         };
