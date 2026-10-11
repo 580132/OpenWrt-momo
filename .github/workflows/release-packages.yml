@@ -60,9 +60,6 @@ jobs:
     needs: release
     name: feed
     runs-on: ubuntu-latest
-    # A feed without valid signing keys cannot be installed from, so only
-    # publish it once the keys have actually been configured.
-    if: ${{ secrets.KEY_BUILD_PUB != '' && secrets.PUBLIC_KEY != '' }}
     permissions:
       contents: read
       pages: write
@@ -83,9 +80,16 @@ jobs:
           for file in feed_momo_*.tar.gz; do tar -x -z -f "$file"; done
 
       - name: prepare
+        env:
+          KEY_BUILD_PUB: ${{ secrets.KEY_BUILD_PUB }}
+          PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
         run: |
-          echo "${{ secrets.KEY_BUILD_PUB }}" > public/key-build.pub
-          echo "${{ secrets.PUBLIC_KEY }}" > public/public-key.pem
+          if [ -z "$KEY_BUILD_PUB" ] || [ -z "$PUBLIC_KEY" ]; then
+            echo "::error::No signing keys configured, refusing to publish the feed. Add the KEY_BUILD_PUB and PUBLIC_KEY secrets first; the feed is unusable without them."
+            exit 1
+          fi
+          echo "$KEY_BUILD_PUB" > public/key-build.pub
+          echo "$PUBLIC_KEY" > public/public-key.pem
           tree --dirsfirst --sort name -P '*.apk|*.ipk' --prune --noreport -H "" -T "Momo's Feed" --charset utf-8 -o public/index.html public
           sed -i '/<p class="VERSION">/,/<\/p>/d' public/index.html
 
