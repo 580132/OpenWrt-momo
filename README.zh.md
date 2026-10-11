@@ -100,6 +100,20 @@ wget -O - https://github.com/nikkinikki-org/OpenWrt-momo/raw/refs/heads/main/uni
 
 注意上述步骤可能因配置而变动。
 
+## 版本号
+
+`PKG_VERSION` 跟随上游版本，`PKG_RELEASE` 是本 fork 自己的修订号，每次发版递增。
+
+```
+luci-app-momo  1.2.1-r2        (PKG_VERSION:=1.2.1, PKG_RELEASE:=2)
+momo           2026.06.03-r2
+```
+
+`-rN` 的排序高于上游的 `-r1`，因此包管理器会优先安装本仓库的构建产物，而不是上游的。
+
+注意这只在 `PKG_VERSION` 不变时成立：一旦上游发布新版本，需要把 `PKG_VERSION` 同步到对应
+版本，并把 `PKG_RELEASE` 重新从 `2` 开始。
+
 ## 编译
 
 ```shell

@@ -101,6 +101,21 @@ See [Wiki](https://github.com/nikkinikki-org/OpenWrt-momo/wiki)
 
 Note that the steps above may change base on config.
 
+## Versioning
+
+`PKG_VERSION` tracks the upstream version, `PKG_RELEASE` is this fork's own revision
+number and is incremented on every release.
+
+```
+luci-app-momo  1.2.1-r2   (PKG_VERSION:=1.2.1, PKG_RELEASE:=2)
+momo           2026.06.03-r2
+```
+
+`-rN` sorts above the upstream `-r1`, so a package manager picks this build up instead
+of the upstream one. Note that it only holds while `PKG_VERSION` stays the same: once
+upstream publishes a new version, bump `PKG_VERSION` to match it and restart the
+release number at `2`.
+
 ## Compilation
 
 ```shell
