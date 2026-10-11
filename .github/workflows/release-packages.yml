@@ -1,10 +1,16 @@
 name: release-packages
 
+# Tag pushes are handled by release-unsigned.yml, which builds the same matrix
+# and publishes the release without needing signing keys. This workflow is kept
+# for the signed feed and is therefore manual only: a fork cannot read the
+# upstream secrets, so its feed job always stops at "No signing keys
+# configured", and letting it run on every tag just duplicated the build and
+# appended an unused tarball to the release.
+#
+# Restore the push trigger once KEY_BUILD, KEY_BUILD_PUB, PRIVATE_KEY and
+# PUBLIC_KEY are configured and the signed feed is meant to take over.
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - v*
 
 jobs:
   release:
