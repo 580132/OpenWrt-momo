@@ -18,6 +18,37 @@ Transparent Proxy with sing-box on OpenWrt.
 - Access Control
 - Profile Editor
 - Scheduled Restart
+- Core Update (stable / preview / rollback)
+
+## Core Update
+
+`App Config` -> `Core Update` can update the sing-box core in place.
+
+- **Check for Updates** - reads the latest stable and preview tags from the sing-box releases.
+- **Update To Latest Stable** / **Update To Latest Preview** - downloads the official sing-box
+  OpenWrt package (`.ipk` / `.apk`) built for this router's target architecture and installs it
+  with `opkg` / `apk`, then restarts the service. Preview releases are prereleases and may be unstable.
+- **Rollback Core** - reinstalls the version the core was running before the last update.
+
+The update runs in the background and shows its progress in a dialog. Every step is also written
+to the app log, and the `opkg` / `apk` output is appended there for troubleshooting.
+
+Notes:
+
+- The core is installed as the regular `sing-box` package, so `opkg upgrade sing-box` / `apk` will
+  still restore the packaged version if you prefer.
+- At least 128 MiB of free space on the firmware partition is required, plus room for the download
+  in `/tmp`. The available space is checked before anything is downloaded.
+- The same can be done from the shell:
+
+```
+# update to the latest stable release
+/etc/init.d/momo update_core stable
+# update to the latest preview release
+/etc/init.d/momo update_core preview
+# roll back to the previous version
+/etc/init.d/momo rollback_core
+```
 
 ## Install & Update
 

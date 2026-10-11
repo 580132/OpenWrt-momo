@@ -14,11 +14,11 @@ msgstr ""
 msgid "Access Control"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:147
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:369
 msgid "Address Space Size Hard Limit"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:143
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:365
 msgid "Address Space Size Soft Limit"
 msgstr ""
 
@@ -27,7 +27,7 @@ msgstr ""
 msgid "All Port"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:94
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:316
 #: applications/luci-app-momo/root/usr/share/luci/menu.d/luci-app-momo.json:13
 msgid "App Config"
 msgstr ""
@@ -36,7 +36,7 @@ msgstr ""
 msgid "App Log"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:43
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:171
 msgid "App Version"
 msgstr ""
 
@@ -84,11 +84,23 @@ msgstr ""
 msgid "Cache Store RDRC"
 msgstr ""
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:77
+msgid "Cancel"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:75
+msgid "Cancelled"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:258
+msgid "Check for Updates"
+msgstr ""
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:27
 msgid "Choose File"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:99
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:321
 msgid "Choose Profile"
 msgstr ""
 
@@ -110,15 +122,20 @@ msgstr ""
 msgid "Core Log"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:125
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:347
 msgid "Core Only"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:57
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:184
 msgid "Core Status"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:50
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:96
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:221
+msgid "Core Update"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:178
 msgid "Core Version"
 msgstr ""
 
@@ -191,7 +208,7 @@ msgstr ""
 msgid "Editor"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:96
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:318
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/mixin.js:30
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/mixin.js:47
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/mixin.js:66
@@ -210,8 +227,12 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:173
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:395
 msgid "Environment Variable Config"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:62
+msgid "Error:"
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:50
@@ -222,20 +243,28 @@ msgstr ""
 msgid "External Control Config"
 msgstr ""
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:266
+msgid "Failed to fetch the release information from GitHub. Please check the network connection."
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:139
+msgid "Failed to start the core update. Another update may already be running."
+msgstr ""
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:48
 msgid "Fake-IP Ping Hijack"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:132
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:354
 msgid "Fast Reload"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:103
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:325
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:31
 msgid "File:"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:130
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:352
 msgid "General Config"
 msgstr ""
 
@@ -251,15 +280,15 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:155
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:377
 msgid "Heap Size Hard Limit"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:151
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:373
 msgid "Heap Size Soft Limit"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:38
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:166
 msgid "How To Use"
 msgstr ""
 
@@ -293,6 +322,14 @@ msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:105
 msgid "LAN Proxy"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:248
+msgid "Latest Preview Version"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:240
+msgid "Latest Stable Version"
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:86
@@ -337,7 +374,7 @@ msgstr ""
 msgid "Mixin Option"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:38
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:166
 #: applications/luci-app-momo/root/usr/share/luci/menu.d/luci-app-momo.json:3
 msgid "Momo"
 msgstr ""
@@ -362,27 +399,35 @@ msgstr ""
 msgid "NTP Server Port"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:15
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:234
+msgid "None"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:16
 msgid "Not Running"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:170
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:392
 msgid "Number of Open Files Hard Limit"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:167
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:389
 msgid "Number of Open Files Soft Limit"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:140
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:362
 msgid "Number of Processes Hard Limit"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:137
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:359
 msgid "Number of Processes Soft Limit"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:89
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:84
+msgid "OK"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:216
 msgid "Open Dashboard"
 msgstr ""
 
@@ -396,6 +441,10 @@ msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/mixin.js:58
 msgid "Prefer IPv6"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:232
+msgid "Previous Core Version"
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:21
@@ -418,7 +467,7 @@ msgstr ""
 msgid "Proxy Config"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:135
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:357
 msgid "RLIMIT Config"
 msgstr ""
 
@@ -426,7 +475,7 @@ msgstr ""
 msgid "Redirect Mode"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:69
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:196
 msgid "Reload Service"
 msgstr ""
 
@@ -442,15 +491,20 @@ msgstr ""
 msgid "Reserved IP6"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:76
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:203
 msgid "Restart Service"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:303
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:306
+msgid "Rollback Core"
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:64
 msgid "Router Proxy"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:15
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:16
 msgid "Running"
 msgstr ""
 
@@ -470,11 +524,11 @@ msgstr ""
 msgid "Scheduled Clear Size Limit Unit"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:114
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:336
 msgid "Scheduled Restart"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:117
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:339
 msgid "Scheduled Restart Cron"
 msgstr ""
 
@@ -483,23 +537,23 @@ msgstr ""
 msgid "Scroll To Bottom"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:163
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:385
 msgid "Stack Size Hard Limit"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:159
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:381
 msgid "Stack Size Soft Limit"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:110
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:332
 msgid "Start Delay"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:112
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:334
 msgid "Start Immidiately"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:40
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:168
 msgid "Status"
 msgstr ""
 
@@ -519,7 +573,7 @@ msgstr ""
 msgid "Subscription Url"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:107
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:329
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:35
 msgid "Subscription:"
 msgstr ""
@@ -546,15 +600,55 @@ msgstr ""
 msgid "TUN Timeout"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:122
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:224
+msgid "Target Architecture"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:344
 msgid "Test Profile"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:123
+msgid "The core update failed. Please check the app log for details."
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:97
+msgid "The core update is running, this may take a few minutes."
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:268
+msgid "The release information has been fetched."
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:313
+msgid "The sing-box core has been rolled back to the previous version."
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:298
+msgid "The sing-box core has been updated to the latest preview release."
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:283
+msgid "The sing-box core has been updated to the latest stable release."
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:306
+msgid "The sing-box core will be rolled back to the previous version. The service will be restarted once it is complete."
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:291
+msgid "The sing-box core will be updated to the latest preview release. Preview releases may be unstable."
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:276
+msgid "The sing-box core will be updated to the latest stable release. The service will be restarted once the update is complete."
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:45
 msgid "Total"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:38
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:166
 msgid "Transparent Proxy with sing-box on OpenWrt."
 msgstr ""
 
@@ -570,14 +664,24 @@ msgstr ""
 msgid "UI Path"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:145
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:149
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:153
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:157
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:161
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:165
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:177
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:181
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:226
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:242
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:250
+msgid "Unknown"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:51
+msgid "Unknown error"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:367
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:371
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:375
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:379
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:383
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:387
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:399
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:403
 msgid "Unlimited"
 msgstr ""
 
@@ -614,8 +718,18 @@ msgstr ""
 msgid "Update At"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:83
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:210
 msgid "Update Dashboard"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:288
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:291
+msgid "Update To Latest Preview"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:273
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:276
+msgid "Update To Latest Stable"
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:23
@@ -634,6 +748,6 @@ msgstr ""
 msgid "User Agent"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:128
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:350
 msgid "procd Config"
 msgstr ""

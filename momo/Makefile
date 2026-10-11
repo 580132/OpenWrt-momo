@@ -29,6 +29,7 @@ define Package/momo/install
 	$(INSTALL_DIR) $(1)/etc/momo/profiles
 	$(INSTALL_DIR) $(1)/etc/momo/subscriptions
 	$(INSTALL_DIR) $(1)/etc/momo/run
+	$(INSTALL_DIR) $(1)/etc/momo/core
 
 	$(INSTALL_BIN) $(CURDIR)/files/ucode/include.uc $(1)/etc/momo/ucode/include.uc
 	$(INSTALL_BIN) $(CURDIR)/files/ucode/mixin.uc $(1)/etc/momo/ucode/mixin.uc
@@ -37,6 +38,7 @@ define Package/momo/install
 	$(INSTALL_BIN) $(CURDIR)/files/scripts/include.sh $(1)/etc/momo/scripts/include.sh
 	$(INSTALL_BIN) $(CURDIR)/files/scripts/firewall_include.sh $(1)/etc/momo/scripts/firewall_include.sh
 	$(INSTALL_BIN) $(CURDIR)/files/scripts/debug.sh $(1)/etc/momo/scripts/debug.sh
+	$(INSTALL_BIN) $(CURDIR)/files/scripts/update_core.sh $(1)/etc/momo/scripts/update_core.sh
 
 	$(INSTALL_BIN) $(CURDIR)/files/firewall/geoip_cn.nft $(1)/etc/momo/firewall/geoip_cn.nft
 	$(INSTALL_BIN) $(CURDIR)/files/firewall/geoip6_cn.nft $(1)/etc/momo/firewall/geoip6_cn.nft

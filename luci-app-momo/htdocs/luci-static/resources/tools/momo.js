@@ -70,6 +70,37 @@ const callMomoDebug = rpc.declare({
     expect: { '': {} }
 });
 
+const callMomoCoreInfo = rpc.declare({
+    object: 'luci.momo',
+    method: 'core_info',
+    expect: { '': {} }
+});
+
+const callMomoCheckCoreUpdate = rpc.declare({
+    object: 'luci.momo',
+    method: 'check_core_update',
+    expect: { '': {} }
+});
+
+const callMomoUpdateCore = rpc.declare({
+    object: 'luci.momo',
+    method: 'update_core',
+    params: ['channel'],
+    expect: { '': {} }
+});
+
+const callMomoRollbackCore = rpc.declare({
+    object: 'luci.momo',
+    method: 'rollback_core',
+    expect: { '': {} }
+});
+
+const callMomoCoreUpdateStatus = rpc.declare({
+    object: 'luci.momo',
+    method: 'core_update_status',
+    expect: { '': {} }
+});
+
 return baseclass.extend({
     getPaths: async function () {
         return callMomoGetPaths();
@@ -182,5 +213,25 @@ return baseclass.extend({
 
     debug: function () {
         return callMomoDebug();
+    },
+
+    coreInfo: function () {
+        return callMomoCoreInfo();
+    },
+
+    checkCoreUpdate: function () {
+        return callMomoCheckCoreUpdate();
+    },
+
+    updateCore: function (channel) {
+        return callMomoUpdateCore(channel);
+    },
+
+    rollbackCore: function () {
+        return callMomoRollbackCore();
+    },
+
+    coreUpdateStatus: function () {
+        return callMomoCoreUpdateStatus();
     },
 })

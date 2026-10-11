@@ -21,11 +21,11 @@ msgstr "API 密码"
 msgid "Access Control"
 msgstr "访问控制"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:147
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:369
 msgid "Address Space Size Hard Limit"
 msgstr "地址空间大小硬限制"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:143
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:365
 msgid "Address Space Size Soft Limit"
 msgstr "地址空间大小软限制"
 
@@ -34,7 +34,7 @@ msgstr "地址空间大小软限制"
 msgid "All Port"
 msgstr "全部端口"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:94
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:316
 #: applications/luci-app-momo/root/usr/share/luci/menu.d/luci-app-momo.json:13
 msgid "App Config"
 msgstr "插件配置"
@@ -43,7 +43,7 @@ msgstr "插件配置"
 msgid "App Log"
 msgstr "插件日志"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:43
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:171
 msgid "App Version"
 msgstr "插件版本"
 
@@ -91,11 +91,23 @@ msgstr "缓存 FakeIP"
 msgid "Cache Store RDRC"
 msgstr "缓存 RDRC"
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:77
+msgid "Cancel"
+msgstr "取消"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:75
+msgid "Cancelled"
+msgstr "已取消"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:258
+msgid "Check for Updates"
+msgstr "检查更新"
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:27
 msgid "Choose File"
 msgstr "选择文件"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:99
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:321
 msgid "Choose Profile"
 msgstr "选择配置文件"
 
@@ -117,15 +129,20 @@ msgstr "常用端口"
 msgid "Core Log"
 msgstr "核心日志"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:125
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:347
 msgid "Core Only"
 msgstr "仅核心"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:57
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:184
 msgid "Core Status"
 msgstr "核心状态"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:50
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:96
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:221
+msgid "Core Update"
+msgstr "核心更新"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:178
 msgid "Core Version"
 msgstr "核心版本"
 
@@ -198,7 +215,7 @@ msgstr "编辑订阅"
 msgid "Editor"
 msgstr "编辑器"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:96
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:318
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/mixin.js:30
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/mixin.js:47
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/mixin.js:66
@@ -217,9 +234,13 @@ msgstr "编辑器"
 msgid "Enable"
 msgstr "启用"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:173
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:395
 msgid "Environment Variable Config"
 msgstr "环境变量配置"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:62
+msgid "Error:"
+msgstr "错误："
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:50
 msgid "Expire At"
@@ -229,20 +250,28 @@ msgstr "到期时间"
 msgid "External Control Config"
 msgstr "外部控制配置"
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:266
+msgid "Failed to fetch the release information from GitHub. Please check the network connection."
+msgstr "无法从 GitHub 获取版本信息，请检查网络连接。"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:139
+msgid "Failed to start the core update. Another update may already be running."
+msgstr "无法启动核心更新，可能已有更新正在进行。"
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:48
 msgid "Fake-IP Ping Hijack"
 msgstr "Fake-IP Ping 劫持"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:132
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:354
 msgid "Fast Reload"
 msgstr "快速重载"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:103
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:325
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:31
 msgid "File:"
 msgstr "文件："
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:130
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:352
 msgid "General Config"
 msgstr "全局配置"
 
@@ -258,15 +287,15 @@ msgstr "授予访问 momo 程序的权限"
 msgid "Group"
 msgstr "用户组"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:155
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:377
 msgid "Heap Size Hard Limit"
 msgstr "堆大小硬限制"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:151
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:373
 msgid "Heap Size Soft Limit"
 msgstr "堆大小软限制"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:38
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:166
 msgid "How To Use"
 msgstr "使用说明"
 
@@ -301,6 +330,14 @@ msgstr "入站接口"
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:105
 msgid "LAN Proxy"
 msgstr "局域网代理"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:248
+msgid "Latest Preview Version"
+msgstr "最新预览版"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:240
+msgid "Latest Stable Version"
+msgstr "最新稳定版"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:86
 msgid "Local"
@@ -344,7 +381,7 @@ msgstr "混入配置"
 msgid "Mixin Option"
 msgstr "混入选项"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:38
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:166
 #: applications/luci-app-momo/root/usr/share/luci/menu.d/luci-app-momo.json:3
 msgid "Momo"
 msgstr "Momo"
@@ -369,27 +406,35 @@ msgstr "NTP 服务地址"
 msgid "NTP Server Port"
 msgstr "NTP 服务端口"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:15
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:234
+msgid "None"
+msgstr "无"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:16
 msgid "Not Running"
 msgstr "未在运行"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:170
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:392
 msgid "Number of Open Files Hard Limit"
 msgstr "打开文件数量硬限制"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:167
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:389
 msgid "Number of Open Files Soft Limit"
 msgstr "打开文件数量软限制"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:140
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:362
 msgid "Number of Processes Hard Limit"
 msgstr "进程数硬限制"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:137
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:359
 msgid "Number of Processes Soft Limit"
 msgstr "进程数软限制"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:89
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:84
+msgid "OK"
+msgstr "确定"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:216
 msgid "Open Dashboard"
 msgstr "打开面板"
 
@@ -404,6 +449,10 @@ msgstr "优先 IPv4"
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/mixin.js:58
 msgid "Prefer IPv6"
 msgstr "优先 IPv6"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:232
+msgid "Previous Core Version"
+msgstr "上一个核心版本"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:21
 #: applications/luci-app-momo/root/usr/share/luci/menu.d/luci-app-momo.json:21
@@ -425,7 +474,7 @@ msgstr "代理"
 msgid "Proxy Config"
 msgstr "代理配置"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:135
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:357
 msgid "RLIMIT Config"
 msgstr "资源限制配置"
 
@@ -433,7 +482,7 @@ msgstr "资源限制配置"
 msgid "Redirect Mode"
 msgstr "Redirect 模式"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:69
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:196
 msgid "Reload Service"
 msgstr "重载服务"
 
@@ -449,15 +498,20 @@ msgstr "IPv4 保留地址"
 msgid "Reserved IP6"
 msgstr "IPv6 保留地址"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:76
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:203
 msgid "Restart Service"
 msgstr "重启服务"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:303
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:306
+msgid "Rollback Core"
+msgstr "回滚核心"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:64
 msgid "Router Proxy"
 msgstr "路由器代理"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:15
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:16
 msgid "Running"
 msgstr "运行中"
 
@@ -477,11 +531,11 @@ msgstr "日志大小上限"
 msgid "Scheduled Clear Size Limit Unit"
 msgstr "日志大小上限单位"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:114
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:336
 msgid "Scheduled Restart"
 msgstr "定时重启"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:117
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:339
 msgid "Scheduled Restart Cron"
 msgstr "Cron 表达式"
 
@@ -490,23 +544,23 @@ msgstr "Cron 表达式"
 msgid "Scroll To Bottom"
 msgstr "滚动到底部"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:163
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:385
 msgid "Stack Size Hard Limit"
 msgstr "栈大小硬限制"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:159
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:381
 msgid "Stack Size Soft Limit"
 msgstr "栈大小软限制"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:110
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:332
 msgid "Start Delay"
 msgstr "启动延迟"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:112
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:334
 msgid "Start Immidiately"
 msgstr "立即启动"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:40
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:168
 msgid "Status"
 msgstr "状态"
 
@@ -526,7 +580,7 @@ msgstr "订阅名称"
 msgid "Subscription Url"
 msgstr "订阅链接"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:107
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:329
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:35
 msgid "Subscription:"
 msgstr "订阅："
@@ -553,15 +607,55 @@ msgstr "TUN 模式"
 msgid "TUN Timeout"
 msgstr "TUN 等待超时"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:122
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:224
+msgid "Target Architecture"
+msgstr "目标架构"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:344
 msgid "Test Profile"
 msgstr "检查配置文件"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:123
+msgid "The core update failed. Please check the app log for details."
+msgstr "核心更新失败，请查看插件日志了解详情。"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:97
+msgid "The core update is running, this may take a few minutes."
+msgstr "核心正在更新中，这可能需要几分钟。"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:268
+msgid "The release information has been fetched."
+msgstr "已获取版本信息。"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:313
+msgid "The sing-box core has been rolled back to the previous version."
+msgstr "sing-box 核心已回滚到上一个版本。"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:298
+msgid "The sing-box core has been updated to the latest preview release."
+msgstr "sing-box 核心已更新到最新预览版。"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:283
+msgid "The sing-box core has been updated to the latest stable release."
+msgstr "sing-box 核心已更新到最新稳定版。"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:306
+msgid "The sing-box core will be rolled back to the previous version. The service will be restarted once it is complete."
+msgstr "sing-box 核心将回滚到上一个版本，完成后将重启服务。"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:291
+msgid "The sing-box core will be updated to the latest preview release. Preview releases may be unstable."
+msgstr "sing-box 核心将更新到最新预览版，预览版可能不稳定。"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:276
+msgid "The sing-box core will be updated to the latest stable release. The service will be restarted once the update is complete."
+msgstr "sing-box 核心将更新到最新稳定版，更新完成后将重启服务。"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:45
 msgid "Total"
 msgstr "总量"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:38
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:166
 msgid "Transparent Proxy with sing-box on OpenWrt."
 msgstr "在 OpenWrt 上使用 sing-box 进行透明代理"
 
@@ -577,14 +671,24 @@ msgstr "UI 下载地址"
 msgid "UI Path"
 msgstr "UI 路径"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:145
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:149
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:153
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:157
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:161
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:165
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:177
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:181
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:226
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:242
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:250
+msgid "Unknown"
+msgstr "未知"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:51
+msgid "Unknown error"
+msgstr "未知错误"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:367
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:371
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:375
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:379
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:383
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:387
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:399
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:403
 msgid "Unlimited"
 msgstr "无限制"
 
@@ -621,9 +725,19 @@ msgstr "更新"
 msgid "Update At"
 msgstr "更新时间"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:83
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:210
 msgid "Update Dashboard"
 msgstr "更新面板"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:288
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:291
+msgid "Update To Latest Preview"
+msgstr "更新到最新预览版"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:273
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:276
+msgid "Update To Latest Stable"
+msgstr "更新到最新稳定版"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:23
 msgid "Upload Profile"
@@ -641,6 +755,6 @@ msgstr "用户"
 msgid "User Agent"
 msgstr "用户代理（UA）"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:128
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:350
 msgid "procd Config"
 msgstr "procd 配置"

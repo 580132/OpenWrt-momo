@@ -24,6 +24,12 @@ SH_DIR="$HOME_DIR/scripts"
 INCLUDE_SH="$SH_DIR/include.sh"
 FIREWALL_INCLUDE_SH="$SH_DIR/firewall_include.sh"
 DEBUG_SH="$SH_DIR/debug.sh"
+UPDATE_CORE_SH="$SH_DIR/update_core.sh"
+
+## core
+CORE_PATH="/usr/bin/sing-box"
+CORE_DIR="$HOME_DIR/core"
+CORE_PREVIOUS_VERSION_PATH="$CORE_DIR/previous_version"
 
 ## firewall
 FIREWALL_DIR="$HOME_DIR/firewall"
@@ -42,6 +48,10 @@ PID_FILE_PATH="$TEMP_DIR/momo.pid"
 STARTED_FLAG_PATH="$TEMP_DIR/started.flag"
 BRIDGE_NF_CALL_IPTABLES_FLAG_PATH="$TEMP_DIR/bridge_nf_call_iptables.flag"
 BRIDGE_NF_CALL_IP6TABLES_FLAG_PATH="$TEMP_DIR/bridge_nf_call_ip6tables.flag"
+CORE_UPDATE_DIR="$TEMP_DIR/core_update"
+CORE_UPDATE_STATUS_PATH="$CORE_UPDATE_DIR/status"
+CORE_UPDATE_RESULT_PATH="$CORE_UPDATE_DIR/result"
+CORE_UPDATE_LOCK_PATH="$TEMP_DIR/core_update.lock"
 
 # functions
 get_paths() {
@@ -62,6 +72,11 @@ get_paths() {
 	json_add_string include_sh "$INCLUDE_SH"
 	json_add_string firewall_include_sh "$FIREWALL_INCLUDE_SH"
 	json_add_string debug_sh "$DEBUG_SH"
+	json_add_string update_core_sh "$UPDATE_CORE_SH"
+
+	json_add_string core_path "$CORE_PATH"
+	json_add_string core_dir "$CORE_DIR"
+	json_add_string core_previous_version_path "$CORE_PREVIOUS_VERSION_PATH"
 
 	json_add_string firewall_dir "$FIREWALL_DIR"
 	json_add_string geoip_cn_nft "$GEOIP_CN_NFT"
@@ -77,6 +92,10 @@ get_paths() {
 	json_add_string started_flag_path "$STARTED_FLAG_PATH"
 	json_add_string bridge_nf_call_iptables_flag_path "$BRIDGE_NF_CALL_IPTABLES_FLAG_PATH"
 	json_add_string bridge_nf_call_ip6tables_flag_path "$BRIDGE_NF_CALL_IP6TABLES_FLAG_PATH"
+	json_add_string core_update_dir "$CORE_UPDATE_DIR"
+	json_add_string core_update_status_path "$CORE_UPDATE_STATUS_PATH"
+	json_add_string core_update_result_path "$CORE_UPDATE_RESULT_PATH"
+	json_add_string core_update_lock_path "$CORE_UPDATE_LOCK_PATH"
 
 	json_dump
 
@@ -120,6 +139,9 @@ prepare_files() {
 	fi
 	if [ ! -d "$TEMP_DIR" ]; then
 		mkdir -p "$TEMP_DIR"
+	fi
+	if [ ! -d "$CORE_DIR" ]; then
+		mkdir -p "$CORE_DIR"
 	fi
 }
 

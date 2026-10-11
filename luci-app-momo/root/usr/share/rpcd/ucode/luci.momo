@@ -2,7 +2,7 @@
 
 'use strict';
 
-import { popen } from 'fs';
+import { popen, readfile, stat } from 'fs';
 import { get_paths, merge_exists, get_users, get_groups, get_cgroups, load_profile } from '/etc/momo/ucode/include.uc';
 
 const methods = {
@@ -98,6 +98,68 @@ const methods = {
 			const paths = get_paths();
 			const success = system(`${paths.debug_sh} > ${paths.debug_log_path}`) == 0;
 			return { success: success };
+		}
+	},
+	core_info: {
+		call: function() {
+			const paths = get_paths();
+			const result = { 'package_manager': '', 'package_extension': '', 'target_arch': '', 'current_version': '', 'previous_version': '' };
+			const process = popen(`${paths.update_core_sh} info`);
+			if (process) {
+				const data = json(process);
+				process.close();
+				if (type(data) == 'object') {
+					for (let key in keys(result)) {
+						result[key] = data[key] ?? '';
+					}
+				}
+			}
+			return result;
+		}
+	},
+	check_core_update: {
+		call: function() {
+			const paths = get_paths();
+			const result = { stable: '', preview: '' };
+			const process = popen(`${paths.update_core_sh} check`);
+			if (process) {
+				const data = json(process);
+				process.close();
+				if (type(data) == 'object') {
+					result.stable = data.stable ?? '';
+					result.preview = data.preview ?? '';
+				}
+			}
+			return result;
+		}
+	},
+	update_core: {
+		args: { channel: 'channel' },
+		call: function(req) {
+			const paths = get_paths();
+			const channel = req.args?.channel;
+			if (channel != 'stable' && channel != 'preview') {
+				return { started: false };
+			}
+			return { started: system([paths.update_core_sh, 'start', 'update', channel]) == 0 };
+		}
+	},
+	rollback_core: {
+		call: function() {
+			const paths = get_paths();
+			return { started: system([paths.update_core_sh, 'start', 'rollback']) == 0 };
+		}
+	},
+	core_update_status: {
+		call: function() {
+			const paths = get_paths();
+			const running = stat(paths.core_update_lock_path) != null;
+			const lines = filter(split(readfile(paths.core_update_status_path) ?? '', '\n'), (line) => trim(line) != '');
+			let success = false;
+			if (!running) {
+				success = trim(readfile(paths.core_update_result_path) ?? '') == 'success';
+			}
+			return { running: running, success: success, lines: lines };
 		}
 	}
 };

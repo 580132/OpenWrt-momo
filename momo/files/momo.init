@@ -10,6 +10,8 @@ PROG="/usr/bin/sing-box"
 
 extra_command 'update_subscription' 'Update subscription by section id'
 extra_command 'clear_logs' 'Clear logs if size exceeds the limit'
+extra_command 'update_core' 'Update the sing-box core to the latest stable or preview release'
+extra_command 'rollback_core' 'Rollback the sing-box core to the previous version'
 
 boot_func() {
 	# prepare files
@@ -593,4 +595,13 @@ update_subscription() {
 		rm -f "$subscription_tmpfile"
 	fi
 	uci_commit "momo"
+}
+
+update_core() {
+	local channel; channel="$1"
+	"$UPDATE_CORE_SH" update "$channel"
+}
+
+rollback_core() {
+	"$UPDATE_CORE_SH" rollback
 }

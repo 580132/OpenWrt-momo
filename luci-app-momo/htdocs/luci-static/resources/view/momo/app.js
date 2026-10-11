@@ -3,6 +3,7 @@
 'require view';
 'require uci';
 'require poll';
+'require ui';
 'require tools.momo as momo';
 
 function renderStatus(running) {
@@ -17,13 +18,138 @@ function updateStatus(element, running) {
     return element;
 }
 
+function renderCoreVersion(version) {
+    return E('input', { id: 'core_version', readonly: '', value: version ?? '' });
+}
+
+function updateCoreVersion(version) {
+    const element = document.getElementById('core_version');
+    if (element) {
+        element.value = version ?? '';
+    }
+    return element;
+}
+
+function setOptionValue(map, section_id, name, value) {
+    const option = map.lookupOption(name, section_id)[0];
+    if (option) {
+        const element = option.getUIElement(section_id);
+        if (element) {
+            element.setValue(value ?? '');
+        }
+    }
+}
+
+function refreshCoreInfo(map, section_id) {
+    return momo.coreInfo().then(function (info) {
+        setOptionValue(map, section_id, '_previous_core_version', info.previous_version ?? '');
+        updateCoreVersion(info.current_version ?? '');
+    });
+}
+
+function errorMessage(error) {
+    return String(error?.message ?? error ?? _('Unknown error'));
+}
+
+// Buttons are wrapped by ui.createHandlerFn(), which swallows rejections,
+// so every outcome has to be reported explicitly here.
+function report(promise, successMessage) {
+    return promise.then(function () {
+        if (successMessage) {
+            ui.addNotification(null, E('p', [successMessage]), 'info');
+        }
+    }, function (error) {
+        ui.addNotification(null, E('p', [_('Error:'), ' ', errorMessage(error)]), 'danger');
+    });
+}
+
+function confirmAction(title, message) {
+    return new Promise(function (resolve, reject) {
+        ui.showModal(title, [
+            E('p', {}, [message]),
+            E('div', { 'class': 'right' }, [
+                E('button', {
+                    'class': 'cbi-button cbi-button-negative',
+                    'click': function () {
+                        ui.hideModal();
+                        reject(new Error(_('Cancelled')));
+                    }
+                }, _('Cancel')),
+                E('button', {
+                    'class': 'cbi-button cbi-button-action',
+                    'click': function () {
+                        ui.hideModal();
+                        resolve();
+                    }
+                }, _('OK'))
+            ])
+        ]);
+    });
+}
+
+function trackCoreUpdate() {
+    return new Promise(function (resolve, reject) {
+        const output = E('pre', {
+            'style': 'max-height: 20em; overflow: auto; white-space: pre-wrap; margin: 0.5em 0 0 0;'
+        });
+
+        ui.showModal(_('Core Update'), [
+            E('p', {}, [_('The core update is running, this may take a few minutes.')]),
+            output
+        ]);
+
+        let previous = null;
+
+        const finish = function (fn, value) {
+            clearInterval(timer);
+            ui.hideModal();
+            fn(value);
+        };
+
+        const poll = function () {
+            momo.coreUpdateStatus().then(function (status) {
+                if (status.lines && status.lines.length) {
+                    const text = status.lines.join('\n');
+                    if (text !== previous) {
+                        previous = text;
+                        output.textContent = text;
+                        output.scrollTop = output.scrollHeight;
+                    }
+                }
+                if (!status.running) {
+                    if (status.success) {
+                        finish(resolve);
+                    } else {
+                        finish(reject, new Error(_('The core update failed. Please check the app log for details.')));
+                    }
+                }
+            }, function (error) {
+                finish(reject, error);
+            });
+        };
+
+        const timer = setInterval(poll, 2000);
+        poll();
+    });
+}
+
+function startCoreUpdate(promise) {
+    return promise.then(function (result) {
+        if (!result?.started) {
+            return Promise.reject(new Error(_('Failed to start the core update. Another update may already be running.')));
+        }
+        return trackCoreUpdate();
+    });
+}
+
 return view.extend({
     load: function () {
         return Promise.all([
             uci.load('momo'),
             momo.version(),
             momo.status(),
-            momo.listProfiles()
+            momo.listProfiles(),
+            momo.coreInfo()
         ]);
     },
     render: function (data) {
@@ -32,6 +158,8 @@ return view.extend({
         const coreVersion = data[1].core ?? '';
         const running = data[2];
         const profiles = data[3];
+        const coreInfo = data[4] ?? {};
+        const latestVersions = { stable: '', preview: '' };
 
         let m, s, o;
 
@@ -47,10 +175,9 @@ return view.extend({
         };
         o.write = function () { };
 
-        o = s.option(form.Value, '_core_version', _('Core Version'));
-        o.readonly = true;
-        o.load = function () {
-            return coreVersion;
+        o = s.option(form.DummyValue, '_core_version', _('Core Version'));
+        o.cfgvalue = function () {
+            return renderCoreVersion(coreVersion);
         };
         o.write = function () { };
 
@@ -89,6 +216,101 @@ return view.extend({
         o.inputtitle = _('Open Dashboard');
         o.onclick = function () {
             return momo.openDashboard();
+        };
+
+        s = m.section(form.TableSection, 'core_update', _('Core Update'));
+        s.anonymous = true;
+
+        o = s.option(form.Value, '_target_architecture', _('Target Architecture'));
+        o.readonly = true;
+        o.placeholder = _('Unknown');
+        o.load = function () {
+            return coreInfo.target_arch ?? '';
+        };
+        o.write = function () { };
+
+        o = s.option(form.Value, '_previous_core_version', _('Previous Core Version'));
+        o.readonly = true;
+        o.placeholder = _('None');
+        o.load = function () {
+            return coreInfo.previous_version ?? '';
+        };
+        o.write = function () { };
+
+        o = s.option(form.Value, '_latest_stable_version', _('Latest Stable Version'));
+        o.readonly = true;
+        o.placeholder = _('Unknown');
+        o.load = function () {
+            return latestVersions.stable;
+        };
+        o.write = function () { };
+
+        o = s.option(form.Value, '_latest_preview_version', _('Latest Preview Version'));
+        o.readonly = true;
+        o.placeholder = _('Unknown');
+        o.load = function () {
+            return latestVersions.preview;
+        };
+        o.write = function () { };
+
+        o = s.option(form.Button, 'check_core_update');
+        o.inputstyle = 'action';
+        o.inputtitle = _('Check for Updates');
+        o.onclick = function (_, section_id) {
+            return report(momo.checkCoreUpdate().then(function (versions) {
+                latestVersions.stable = versions.stable ?? '';
+                latestVersions.preview = versions.preview ?? '';
+                setOptionValue(m, section_id, '_latest_stable_version', latestVersions.stable);
+                setOptionValue(m, section_id, '_latest_preview_version', latestVersions.preview);
+                if (!latestVersions.stable && !latestVersions.preview) {
+                    return Promise.reject(new Error(_('Failed to fetch the release information from GitHub. Please check the network connection.')));
+                }
+            }), _('The release information has been fetched.'));
+        };
+
+        o = s.option(form.Button, 'update_core_stable');
+        o.inputstyle = 'apply';
+        o.inputtitle = _('Update To Latest Stable');
+        o.onclick = function (_, section_id) {
+            return report(
+                confirmAction(_('Update To Latest Stable'), _('The sing-box core will be updated to the latest stable release. The service will be restarted once the update is complete.'))
+                    .then(function () {
+                        return startCoreUpdate(momo.updateCore('stable'));
+                    })
+                    .then(function () {
+                        return refreshCoreInfo(m, section_id);
+                    }),
+                _('The sing-box core has been updated to the latest stable release.'));
+        };
+
+        o = s.option(form.Button, 'update_core_preview');
+        o.inputstyle = 'action';
+        o.inputtitle = _('Update To Latest Preview');
+        o.onclick = function (_, section_id) {
+            return report(
+                confirmAction(_('Update To Latest Preview'), _('The sing-box core will be updated to the latest preview release. Preview releases may be unstable.'))
+                    .then(function () {
+                        return startCoreUpdate(momo.updateCore('preview'));
+                    })
+                    .then(function () {
+                        return refreshCoreInfo(m, section_id);
+                    }),
+                _('The sing-box core has been updated to the latest preview release.'));
+        };
+
+        o = s.option(form.Button, 'rollback_core');
+        o.inputstyle = 'negative';
+        o.inputtitle = _('Rollback Core');
+        o.onclick = function (_, section_id) {
+            return report(
+                confirmAction(_('Rollback Core'), _('The sing-box core will be rolled back to the previous version. The service will be restarted once it is complete.'))
+                    .then(function () {
+                        return startCoreUpdate(momo.rollbackCore());
+                    })
+                    .then(function () {
+                        return refreshCoreInfo(m, section_id);
+                    }),
+                _('The sing-box core has been rolled back to the previous version.'));
         };
 
         s = m.section(form.NamedSection, 'config', 'config', _('App Config'));
