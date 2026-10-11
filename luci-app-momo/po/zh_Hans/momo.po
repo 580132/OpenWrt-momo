@@ -614,6 +614,10 @@ msgstr "核心更新失败，请查看插件日志了解详情。"
 msgid "The core update is running, this may take a few minutes."
 msgstr "核心正在更新中，这可能需要几分钟。"
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:105
+msgid "The core update is taking too long. Please check the app log for details."
+msgstr "核心更新超时。请查看插件日志了解详情。"
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:268
 msgid "The release information has been fetched."
 msgstr "已获取版本信息。"

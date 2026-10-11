@@ -97,6 +97,10 @@ function confirmAction(title, message) {
     });
 }
 
+// hard ceiling on the progress dialog, so the button can never stay spinning
+// for ever even if the job or the status call misbehaves
+const CORE_UPDATE_TIMEOUT_MS = 30 * 60 * 1000;
+
 function trackCoreUpdate() {
     return new Promise(function (resolve, reject) {
         const output = E('pre', {
@@ -109,15 +113,23 @@ function trackCoreUpdate() {
         ]);
 
         let previous = null;
+        let done = false;
 
         const finish = function (fn, value) {
+            if (done) {
+                return;
+            }
+            done = true;
             clearInterval(timer);
+            clearTimeout(deadline);
             ui.hideModal();
             fn(value);
         };
 
         const poll = function () {
-            momo.coreUpdateStatus().then(function (status) {
+            guarded(function () {
+                return momo.coreUpdateStatus();
+            }).then(function (status) {
                 if (status.lines && status.lines.length) {
                     const text = status.lines.join('\n');
                     if (text !== previous) {
@@ -139,6 +151,10 @@ function trackCoreUpdate() {
         };
 
         const timer = setInterval(poll, 2000);
+        const deadline = setTimeout(function () {
+            finish(reject, new Error(_('The core update is taking too long. Please check the app log for details.')));
+        }, CORE_UPDATE_TIMEOUT_MS);
+
         poll();
     });
 }
@@ -282,7 +298,9 @@ return view.extend({
             return report(
                 confirmAction(_('Update To Latest Stable'), _('The sing-box core will be updated to the latest stable release. The service will be restarted once the update is complete.'))
                     .then(function () {
-                        return startCoreUpdate(momo.updateCore('stable'));
+                        return startCoreUpdate(guarded(function () {
+                            return momo.updateCore('stable');
+                        }));
                     })
                     .then(function () {
                         return refreshCoreInfo();
@@ -297,7 +315,9 @@ return view.extend({
             return report(
                 confirmAction(_('Update To Latest Preview'), _('The sing-box core will be updated to the latest preview release. Preview releases may be unstable.'))
                     .then(function () {
-                        return startCoreUpdate(momo.updateCore('preview'));
+                        return startCoreUpdate(guarded(function () {
+                            return momo.updateCore('preview');
+                        }));
                     })
                     .then(function () {
                         return refreshCoreInfo();
