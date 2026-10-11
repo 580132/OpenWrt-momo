@@ -138,9 +138,30 @@ momo           2026.06.03-r2
 ```
 
 `-rN` sorts above the upstream `-r1`, so a package manager picks this build up instead
-of the upstream one. Note that it only holds while `PKG_VERSION` stays the same: once
-upstream publishes a new version, bump `PKG_VERSION` to match it and restart the
-release number at `2`.
+of the upstream one. Keeping the upstream version visible is deliberate: it is
+what tells you at a glance which upstream release the changes are based on.
+
+### Syncing With Upstream
+
+When upstream publishes a new release the fork has to follow it, otherwise the
+upstream packages become the newer ones and replace this build:
+
+```shell
+# 1. merge or rebase onto the upstream tag
+git remote add upstream https://github.com/nikkinikki-org/OpenWrt-momo.git
+git fetch upstream
+git merge upstream/v1.2.1        # or the tag of the release being synced
+
+# 2. move PKG_VERSION to the upstream version, in both Makefiles
+#      momo/Makefile          PKG_VERSION:=2026.06.03
+#      luci-app-momo/Makefile PKG_VERSION:=1.2.1
+
+# 3. reset PKG_RELEASE to 2, the first revision on top of that upstream version
+```
+
+Step 2 is the one to watch. `1.2.1-r2` outranks `1.2.1-r1`, but upstream's
+`1.2.2-r1` outranks `1.2.1-r2` no matter how large `PKG_RELEASE` grows, and
+`momo` uses a date based version that moves on every upstream release.
 
 ## Compilation
 

@@ -135,8 +135,28 @@ momo           2026.06.03-r2
 
 `-rN` 的排序高于上游的 `-r1`，因此包管理器会优先安装本仓库的构建产物，而不是上游的。
 
-注意这只在 `PKG_VERSION` 不变时成立：一旦上游发布新版本，需要把 `PKG_VERSION` 同步到对应
-版本，并把 `PKG_RELEASE` 重新从 `2` 开始。
+保留上游版本号是刻意的：一眼就能看出当前改动是基于哪个上游版本。
+
+### 同步上游
+
+上游发布新版本后必须跟进，否则上游的包会变成更新的版本，把本仓库的构建产物替换掉：
+
+```shell
+# 1. 合并或变基到上游对应的 tag
+git remote add upstream https://github.com/nikkinikki-org/OpenWrt-momo.git
+git fetch upstream
+git merge upstream/v1.2.1        # 或要同步的那个 tag
+
+# 2. 把两个 Makefile 的 PKG_VERSION 改成上游版本
+#      momo/Makefile          PKG_VERSION:=2026.06.03
+#      luci-app-momo/Makefile PKG_VERSION:=1.2.1
+
+# 3. 把 PKG_RELEASE 重置为 2，表示基于该上游版本的第一次修改
+```
+
+第 2 步最容易被漏掉。`1.2.1-r2` 高于 `1.2.1-r1`，但上游的 `1.2.2-r1` 无论你把
+`PKG_RELEASE` 调到多大都高于 `1.2.1-r2`；而且 `momo` 用的是日期版本号，上游每次
+发布都会变。
 
 ## 编译
 
