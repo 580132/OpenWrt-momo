@@ -52,23 +52,12 @@ function errorMessage(error) {
     return String(error?.message ?? error ?? _('Unknown error'));
 }
 
-// Fetches the published versions and writes them into the form, using a dialog
-// of its own so that nothing about it depends on the button handler's promise.
+// Fetches the published versions and writes them into the form. The returned
+// promise always settles: guarded() turns a synchronous throw into a rejection,
+// and the trailing handler reports every outcome, so the button's loading state
+// is guaranteed to clear.
 function runCoreCheck(map, section_id, latestVersions) {
-    ui.showModal(_('Check for Updates'), [
-        E('p', {}, [_('Fetching the release information, please wait...')])
-    ]);
-
-    const done = function (error) {
-        ui.hideModal();
-        if (error) {
-            ui.addNotification(null, E('p', [_('Error:'), ' ', errorMessage(error)]), 'danger');
-        } else {
-            ui.addNotification(null, E('p', [_('The release information has been fetched.')]), 'info');
-        }
-    };
-
-    guarded(function () {
+    return guarded(function () {
         return momo.checkCoreUpdate();
     }).then(function (versions) {
         latestVersions.stable = versions.stable ?? '';
@@ -78,9 +67,10 @@ function runCoreCheck(map, section_id, latestVersions) {
         if (!latestVersions.stable && !latestVersions.preview) {
             throw new Error(_('Failed to reach GitHub. The release list could not be fetched, please check the network.'));
         }
-        done();
+    }).then(function () {
+        ui.addNotification(null, E('p', [_('The release information has been fetched.')]), 'info');
     }).then(null, function (error) {
-        done(error);
+        ui.addNotification(null, E('p', [_('Error:'), ' ', errorMessage(error)]), 'danger');
     });
 }
 
@@ -325,8 +315,8 @@ return view.extend({
         o.inputstyle = 'action';
         o.inputtitle = _('Check for Updates');
         o.onclick = function (_, section_id) {
-            detached(function () {
-                runCoreCheck(m, section_id, latestVersions);
+            return guarded(function () {
+                return runCoreCheck(m, section_id, latestVersions);
             });
         };
 

@@ -266,10 +266,6 @@ msgstr "Fake-IP Ping 劫持"
 msgid "Fast Reload"
 msgstr "快速重载"
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:1
-msgid "Fetching the release information, please wait..."
-msgstr "正在获取发布信息，请稍候…"
-
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:325
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:31
 msgid "File:"

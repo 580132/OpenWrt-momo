@@ -259,10 +259,6 @@ msgstr ""
 msgid "Fast Reload"
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:1
-msgid "Fetching the release information, please wait..."
-msgstr ""
-
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:325
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:31
 msgid "File:"
