@@ -54,8 +54,9 @@ function errorMessage(error) {
 
 // Fetches the published versions and writes them into the form. The returned
 // promise always settles: guarded() turns a synchronous throw into a rejection,
-// and the trailing handler reports every outcome, so the button's loading state
-// is guaranteed to clear.
+// and the trailing handler reports failures, so the button's loading state is
+// guaranteed to clear. Success needs no notification, the refreshed fields and
+// the button settling back are the confirmation.
 function runCoreCheck(map, section_id, latestVersions) {
     return guarded(function () {
         return momo.checkCoreUpdate();
@@ -67,8 +68,6 @@ function runCoreCheck(map, section_id, latestVersions) {
         if (!latestVersions.stable && !latestVersions.preview) {
             throw new Error(_('Failed to reach GitHub. The release list could not be fetched, please check the network.'));
         }
-    }).then(function () {
-        ui.addNotification(null, E('p', [_('The release information has been fetched.')]), 'info');
     }).then(null, function (error) {
         ui.addNotification(null, E('p', [_('Error:'), ' ', errorMessage(error)]), 'danger');
     });

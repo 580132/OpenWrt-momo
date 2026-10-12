@@ -611,10 +611,6 @@ msgstr ""
 msgid "The core update is taking too long. Please check the app log for details."
 msgstr ""
 
-#: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:268
-msgid "The release information has been fetched."
-msgstr ""
-
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:1
 msgid "The sing-box core is already at the latest preview release, or it has been updated to it."
 msgstr ""
