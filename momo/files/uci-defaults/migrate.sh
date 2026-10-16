@@ -54,6 +54,10 @@ section_mixin=$(uci -q get gg.mixin); [ -z "$section_mixin" ] && {
 # since v1.2.1
 config_clear_at_stop=$(uci -q get gg.log.clear_at_stop); [ -z "$config_clear_at_stop" ] && uci set gg.log.clear_at_stop=1
 
+# firewall
+# gg never touches the firewall; drop the include left by earlier releases
+uci -q del firewall.gg
+
 # core channel
 # the update button follows whatever channel is selected in App Config
 config_core_channel=$(uci -q get gg.config.core_channel); [ -z "$config_core_channel" ] && uci set gg.config.core_channel=stable
