@@ -23,7 +23,7 @@ procd=$(uci -q get gg.procd); [ -z "$procd" ] && {
 
 # since v1.1.1
 
-dummy_device=$(uci -q get gg.routing.dummy_device); [ -z "$dummy_device" ] && uci set gg.routing.dummy_device=momo-dummy
+dummy_device=$(uci -q get gg.routing.dummy_device); [ -z "$dummy_device" ] && uci set gg.routing.dummy_device=gg-dummy
 
 # since v1.1.2
 
@@ -68,7 +68,7 @@ config_core_channel=$(uci -q get gg.config.core_channel); [ -z "$config_core_cha
 section_core_update=$(uci -q get gg.core_update); [ -z "$section_core_update" ] && uci set gg.core_update=core_update
 
 # commit
-uci commit momo
+uci commit gg
 
 # exit with 0
 exit 0

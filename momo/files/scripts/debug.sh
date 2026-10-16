@@ -2,17 +2,17 @@
 
 . "$IPKG_INSTROOT/etc/gg/scripts/include.sh"
 
-enabled=`uci get momo.config.enabled`
+enabled=`uci get gg.config.enabled`
 
 if [ "$enabled" == "0" ]; then
-	uci set momo.config.enabled=1
-	uci commit momo
+	uci set gg.config.enabled=1
+	uci commit gg
 	/etc/init.d/gg restart
 fi
 
 echo \
 "
-# Momo Debug Info
+# GG Debug Info
 ## system
 \`\`\`shell
 `
@@ -292,12 +292,12 @@ ip rule list
 \`\`\`
 TPROXY: 
 `
-ip route list table "$(uci get momo.routing.tproxy_route_table)"
+ip route list table "$(uci get gg.routing.tproxy_route_table)"
 `
 
 TUN: 
 `
-ip route list table "$(uci get momo.routing.tun_route_table)"
+ip route list table "$(uci get gg.routing.tun_route_table)"
 `
 \`\`\`
 ## ip6 rule
@@ -310,12 +310,12 @@ ip -6 rule list
 \`\`\`
 TPROXY: 
 `
-ip -6 route list table "$(uci get momo.routing.tproxy_route_table)"
+ip -6 route list table "$(uci get gg.routing.tproxy_route_table)"
 `
 
 TUN: 
 `
-ip -6 route list table "$(uci get momo.routing.tun_route_table)"
+ip -6 route list table "$(uci get gg.routing.tun_route_table)"
 `
 \`\`\`
 ## firewall tables
@@ -327,7 +327,7 @@ nft list tables
 ## firewall
 \`\`\`
 `
-nft list table inet momo
+nft list table inet gg
 `
 \`\`\`
 ## service
@@ -339,7 +339,7 @@ nft list table inet momo
 "
 
 if [ "$enabled" == "0" ]; then
-	uci set momo.config.enabled=0
-	uci commit momo
+	uci set gg.config.enabled=0
+	uci commit gg
 	/etc/init.d/gg restart
 fi
