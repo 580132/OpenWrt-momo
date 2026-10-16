@@ -120,8 +120,8 @@ download_package() {
 # download
 echo "download packages"
 : > "$work_dir/manifest"
-download_package "momo-"
-download_package "luci-app-momo-"
+download_package "momo-core-"
+download_package "luci-app-momo-core-"
 for lang in $languages; do
 	download_package "luci-i18n-momo-${lang}-"
 done

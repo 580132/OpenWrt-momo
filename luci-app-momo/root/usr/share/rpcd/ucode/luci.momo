@@ -21,13 +21,13 @@ const methods = {
 			if (system('command -v apk') == 0) {
 				// strip the package name instead of cutting on the dashes, the
 				// name has dashes of its own and the version carries a -r suffix
-				process = popen(`apk list -I luci-app-momo | cut -d ' ' -f 1 | sed 's/^luci-app-momo-//'`);
+				process = popen(`apk list -I luci-app-momo-core | cut -d ' ' -f 1 | sed 's/^luci-app-momo-core-//'`);
 				if (process) {
 					app = trim(process.read('all'));
 					process.close();
 				}
 			} else if (system('command -v opkg') == 0) {
-				process = popen(`opkg list-installed luci-app-momo | cut -d ' ' -f 3`);
+				process = popen(`opkg list-installed luci-app-momo-core | cut -d ' ' -f 3`);
 				if (process) {
 					app = trim(process.read('all'));
 					process.close();
