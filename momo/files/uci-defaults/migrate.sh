@@ -54,6 +54,10 @@ section_mixin=$(uci -q get gg.mixin); [ -z "$section_mixin" ] && {
 # since v1.2.1
 config_clear_at_stop=$(uci -q get gg.log.clear_at_stop); [ -z "$config_clear_at_stop" ] && uci set gg.log.clear_at_stop=1
 
+# core channel
+# the update button follows whatever channel is selected in App Config
+config_core_channel=$(uci -q get gg.config.core_channel); [ -z "$config_core_channel" ] && uci set gg.config.core_channel=stable
+
 # core update
 # the Core Update table section renders one row per existing uci section of
 # its type, so it needs a backing section just like the Status one does

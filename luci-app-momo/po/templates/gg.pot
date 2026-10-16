@@ -118,6 +118,10 @@ msgstr ""
 msgid "Commonly Used Port"
 msgstr ""
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Core Channel"
+msgstr ""
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/log.js:89
 msgid "Core Log"
 msgstr ""
@@ -460,6 +464,10 @@ msgstr ""
 msgid "Prefer IPv6"
 msgstr ""
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Preview"
+msgstr ""
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:21
 #: applications/luci-app-momo/root/usr/share/luci/menu.d/luci-app-momo.json:21
 msgid "Profile"
@@ -543,6 +551,10 @@ msgstr ""
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/log.js:83
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/log.js:116
 msgid "Scroll To Bottom"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Stable"
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:385
@@ -732,6 +744,10 @@ msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:55
 msgid "Update At"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Update Core"
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:210

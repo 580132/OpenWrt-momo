@@ -73,6 +73,21 @@ function runCoreCheck(map, section_id, latestVersions) {
     });
 }
 
+// Reads the channel selected in App Config at click time, so the update
+// follows whatever is currently chosen without requiring a save first.
+// Falls back to stable when the option cannot be read.
+function readCoreChannel(map) {
+    try {
+        const option = map.lookupOption('core_channel', 'config')[0];
+        const element = option && option.getUIElement('config');
+        const value = element && element.getValue();
+        if (value === 'stable' || value === 'preview') {
+            return value;
+        }
+    } catch (e) { /* fall through to the default below */ }
+    return 'stable';
+}
+
 // form.Button wires onclick through ui.createHandlerFn(), which does
 //     t.classList.add('spinning'); t.disabled = true;
 //     Promise.resolve(onclick(...)).finally(() => { t.classList.remove('spinning'); ... });
@@ -358,41 +373,30 @@ return view.extend({
             });
         };
 
-        o = s.option(form.Button, 'update_core_stable');
+        o = s.option(form.Button, 'update_core');
         o.inputstyle = 'apply';
-        o.inputtitle = _('Update To Latest Stable');
+        o.inputtitle = _('Update Core');
         o.onclick = function () {
             detached(function () {
+                const channel = readCoreChannel(m);
+                const confirmTitle = (channel === 'preview') ? _('Update To Latest Preview') : _('Update To Latest Stable');
+                const confirmMessage = (channel === 'preview')
+                    ? _('The sing-box core will be updated to the latest preview release. Preview releases may be unstable.')
+                    : _('The sing-box core will be updated to the latest stable release. The service will be restarted once the update is complete.');
+                const doneMessage = (channel === 'preview')
+                    ? _('The sing-box core is already at the latest preview release, or it has been updated to it.')
+                    : _('The sing-box core is already at the latest stable release, or it has been updated to it.');
                 report(
-                    confirmAction(_('Update To Latest Stable'), _('The sing-box core will be updated to the latest stable release. The service will be restarted once the update is complete.'))
+                    confirmAction(confirmTitle, confirmMessage)
                         .then(function () {
                             return startCoreUpdate(guarded(function () {
-                                return momo.updateCore('stable');
+                                return momo.updateCore(channel);
                             }));
                         })
                         .then(function () {
                             return refreshCoreInfo();
                         }),
-                    _('The sing-box core is already at the latest stable release, or it has been updated to it.'));
-            });
-        };
-
-        o = s.option(form.Button, 'update_core_preview');
-        o.inputstyle = 'action';
-        o.inputtitle = _('Update To Latest Preview');
-        o.onclick = function () {
-            detached(function () {
-                report(
-                    confirmAction(_('Update To Latest Preview'), _('The sing-box core will be updated to the latest preview release. Preview releases may be unstable.'))
-                        .then(function () {
-                            return startCoreUpdate(guarded(function () {
-                                return momo.updateCore('preview');
-                            }));
-                        })
-                        .then(function () {
-                            return refreshCoreInfo();
-                        }),
-                    _('The sing-box core is already at the latest preview release, or it has been updated to it.'));
+                    doneMessage);
             });
         };
 
@@ -428,6 +432,12 @@ return view.extend({
         o.rmempty = false;
 
         o = s.option(form.Flag, 'core_only', _('Core Only'));
+        o.rmempty = false;
+
+        o = s.option(form.ListValue, 'core_channel', _('Core Channel'));
+        o.value('stable', _('Stable'));
+        o.value('preview', _('Preview'));
+        o.default = 'stable';
         o.rmempty = false;
 
         s = m.section(form.NamedSection, 'procd', 'procd', _('procd Config'));

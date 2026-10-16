@@ -125,6 +125,10 @@ msgstr "清空日志"
 msgid "Commonly Used Port"
 msgstr "常用端口"
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Core Channel"
+msgstr "核心通道"
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/log.js:89
 msgid "Core Log"
 msgstr "核心日志"
@@ -467,6 +471,10 @@ msgstr "优先 IPv4"
 msgid "Prefer IPv6"
 msgstr "优先 IPv6"
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Preview"
+msgstr "预览版"
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:21
 #: applications/luci-app-momo/root/usr/share/luci/menu.d/luci-app-momo.json:21
 msgid "Profile"
@@ -551,6 +559,10 @@ msgstr "Cron 表达式"
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/log.js:116
 msgid "Scroll To Bottom"
 msgstr "滚动到底部"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Stable"
+msgstr "稳定版"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:385
 msgid "Stack Size Hard Limit"
@@ -740,6 +752,10 @@ msgstr "更新"
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:55
 msgid "Update At"
 msgstr "更新时间"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Update Core"
+msgstr "更新核心"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:210
 msgid "Update Dashboard"
