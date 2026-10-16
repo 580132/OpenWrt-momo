@@ -612,9 +612,3 @@ table inet gg {
 	{% endif %}
 }
 
-{% if (bypass_china_mainland_ip): %}
-include "/etc/gg/firewall/geoip_cn.nft"
-{% endif %}
-{% if (bypass_china_mainland_ip6): %}
-include "/etc/gg/firewall/geoip6_cn.nft"
-{% endif %}

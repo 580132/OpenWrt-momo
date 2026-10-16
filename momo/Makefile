@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gg
 PKG_VERSION:=2026.10.14
-PKG_RELEASE:=6
+PKG_RELEASE:=7
 
 PKG_LICENSE:=GPL-3.0+
 PKG_MAINTAINER:=Joseph Mory <morytyann@gmail.com>
@@ -25,7 +25,6 @@ define Package/gg/install
 	$(INSTALL_DIR) $(1)/etc/gg
 	$(INSTALL_DIR) $(1)/etc/gg/ucode
 	$(INSTALL_DIR) $(1)/etc/gg/scripts
-	$(INSTALL_DIR) $(1)/etc/gg/firewall
 	$(INSTALL_DIR) $(1)/etc/gg/profiles
 	$(INSTALL_DIR) $(1)/etc/gg/subscriptions
 	$(INSTALL_DIR) $(1)/etc/gg/run
@@ -40,8 +39,6 @@ define Package/gg/install
 	$(INSTALL_BIN) $(CURDIR)/files/scripts/debug.sh $(1)/etc/gg/scripts/debug.sh
 	$(INSTALL_BIN) $(CURDIR)/files/scripts/update_core.sh $(1)/etc/gg/scripts/update_core.sh
 
-	$(INSTALL_BIN) $(CURDIR)/files/firewall/geoip_cn.nft $(1)/etc/gg/firewall/geoip_cn.nft
-	$(INSTALL_BIN) $(CURDIR)/files/firewall/geoip6_cn.nft $(1)/etc/gg/firewall/geoip6_cn.nft
 
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) $(CURDIR)/files/momo.conf $(1)/etc/config/gg
