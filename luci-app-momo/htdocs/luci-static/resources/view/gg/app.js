@@ -301,10 +301,13 @@ return view.extend({
         o.modalonly = true;
 
         o = s.option(form.Value, 'user_agent', _('User Agent'));
-        o.optional = true;
+        o.default = 'sing-box';
+        o.rmempty = false;
         o.modalonly = true;
+        o.value('sing-box');
 
         o = s.option(form.ListValue, 'prefer', _('Prefer'));
+        o.default = 'remote';
         o.value('remote', _('Remote'));
         o.value('local', _('Local'));
 
