@@ -228,7 +228,7 @@ return view.extend({
 
         let m, s, o;
 
-        m = new form.Map('momo', _('Momo'), `${_('Transparent Proxy with sing-box on OpenWrt.')} <a href="https://github.com/nikkinikki-org/OpenWrt-momo/wiki" target="_blank">${_('How To Use')}</a>`);
+        m = new form.Map('momo', _('Momo (Core Only)'), _('Core-only manager: subscriptions, core update and service control.'));
 
         s = m.section(form.TableSection, 'placeholder', _('Status'));
         s.anonymous = true;
@@ -270,11 +270,6 @@ return view.extend({
             return momo.restart();
         };
 
-        o = s.option(form.Button, 'update_dashboard');
-        o.inputstyle = 'positive';
-        o.inputtitle = _('Update Dashboard');
-        o.onclick = function () {
-            return momo.updateDashboard();
         };
 
         o = s.option(form.Button, 'open_dashboard');
