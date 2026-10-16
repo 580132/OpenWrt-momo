@@ -58,12 +58,11 @@ start_service() {
 	fi
 	# get config
 	## app config
-	local scheduled_restart scheduled_restart_cron profile test_profile core_only
+	local scheduled_restart scheduled_restart_cron profile test_profile
 	config_get_bool scheduled_restart "config" "scheduled_restart" 0
 	config_get scheduled_restart_cron "config" "scheduled_restart_cron"
 	config_get profile "config" "profile"
 	config_get_bool test_profile "config" "test_profile" 0
-	config_get_bool core_only "config" "core_only" 0
 	## procd config
 	### general
 	local fast_reload
@@ -84,20 +83,6 @@ start_service() {
 	local env_go_max_procs env_go_mem_limit
 	config_get env_go_max_procs "procd" "env_go_max_procs"
 	config_get env_go_mem_limit "procd" "env_go_mem_limit"
-	## core config
-	local redirect_inbound_tag tproxy_inbound_tag tun_inbound_tag dns_inbound_tag fake_ip_dns_server_tag
-	config_get redirect_inbound_tag "core" "redirect_inbound_tag"
-	config_get tproxy_inbound_tag "core" "tproxy_inbound_tag"
-	config_get tun_inbound_tag "core" "tun_inbound_tag"
-	config_get dns_inbound_tag "core" "dns_inbound_tag"
-	config_get fake_ip_dns_server_tag "core" "fake_ip_dns_server_tag"
-	## proxy config
-	local proxy_enabled ipv4_dns_hijack ipv6_dns_hijack tcp_mode udp_mode
-	config_get_bool proxy_enabled "proxy" "enabled" 0
-	config_get_bool ipv4_dns_hijack "proxy" "ipv4_dns_hijack" 0
-	config_get_bool ipv6_dns_hijack "proxy" "ipv6_dns_hijack" 0
-	config_get tcp_mode "proxy" "tcp_mode"
-	config_get udp_mode "proxy" "udp_mode"
 	## log config
 	local log_scheduled_clear log_scheduled_clear_cron
 	config_get_bool log_scheduled_clear "log" "scheduled_clear" 0
@@ -136,54 +121,8 @@ start_service() {
 		log "App" "Exit."
 		return
 	fi
-	# mixin
-	if [ "$core_only" = 0 ]; then
-		log "Mixin" "Mixin config."
-		ucode -S "$MIXIN_UC"
-	fi
 	# format profile
 	$PROG -c "$RUN_PROFILE_PATH" format -w
-	# check profile
-	if [ "$core_only" = 0 ] && [ "$proxy_enabled" = 1 ]; then
-		log "Profile" "Checking..."
-		if [ "$ipv4_dns_hijack" = 1 ] || [ "$ipv6_dns_hijack" = 1 ]; then
-			local dns_port; dns_port=$(jsonfilter -q -i "$RUN_PROFILE_PATH" -e "@['inbounds'][*]" | jsonfilter -q -a -e "@[@['tag']='$dns_inbound_tag']" | jsonfilter -q -a -e "@[@['type']='direct']" | jsonfilter -q -e "@['listen_port']")
-			if [ -z "$dns_port" ]; then
-				log "Profile" "Check failed."
-				log "Profile" "DNS inbound not found, should be tagged with $dns_inbound_tag and define listen_port."
-				log "App" "Exit."
-				return
-			fi
-		fi
-		if [ "$tcp_mode" = "redirect" ]; then
-			local redirect_port; redirect_port=$(jsonfilter -q -i "$RUN_PROFILE_PATH" -e "@['inbounds'][*]" | jsonfilter -q -a -e "@[@['tag']='$redirect_inbound_tag']" | jsonfilter -q -a -e "@[@['type']='redirect']" | jsonfilter -q -e "@['listen_port']")
-			if [ -z "$redirect_port" ]; then
-				log "Profile" "Check failed."
-				log "Profile" "Redirect inbound not found, should be tagged with $redirect_inbound_tag and define listen_port."
-				log "App" "Exit."
-				return
-			fi
-		fi
-		if [ "$tcp_mode" = "tproxy" ] || [ "$udp_mode" = "tproxy" ]; then
-			local tproxy_port; tproxy_port=$(jsonfilter -q -i "$RUN_PROFILE_PATH" -e "@['inbounds'][*]" | jsonfilter -q -a -e "@[@['tag']='$tproxy_inbound_tag']" | jsonfilter -q -a -e "@[@['type']='tproxy']" | jsonfilter -q -e "@['listen_port']")
-			if [ -z "$tproxy_port" ]; then
-				log "Profile" "Check failed."
-				log "Profile" "TPROXY inbound not found, should be tagged with $tproxy_inbound_tag and define listen_port."
-				log "App" "Exit."
-				return
-			fi
-		fi
-		if [ "$tcp_mode" = "tun" ] || [ "$udp_mode" = "tun" ]; then
-			local tun_device; tun_device=$(jsonfilter -q -i "$RUN_PROFILE_PATH" -e "@['inbounds'][*]" | jsonfilter -q -a -e "@[@['tag']='$tun_inbound_tag']" | jsonfilter -q -a -e "@[@['type']='tun']" | jsonfilter -q -e "@['interface_name']")
-			if [ -z "$tun_device" ]; then
-				log "Profile" "Check failed."
-				log "Profile" "TUN inbound not found, should be tagged with $tun_inbound_tag and define interface_name."
-				log "App" "Exit."
-				return
-			fi
-		fi
-		log "Profile" "Check passed."
-	fi
 	# test profile
 	if [ "$test_profile" = 1 ]; then
 		log "Profile" "Testing..."
@@ -241,146 +180,6 @@ start_service() {
 	touch "$STARTED_FLAG_PATH"
 }
 
-service_started() {
-	# check if started
-	if [ ! -f "$STARTED_FLAG_PATH" ]; then
-		return
-	fi
-	# load config
-	config_load gg
-	# check if proxy enabled
-	local proxy_enabled
-	config_get_bool proxy_enabled "proxy" "enabled" 0
-	if [ "$proxy_enabled" = 0 ]; then
-		log "Proxy" "Disabled."
-		return
-	fi
-	# get config
-	## app config
-	local core_only
-	config_get_bool core_only "config" "core_only" 0
-	## core
-	local tun_inbound_tag fake_ip_dns_server_tag
-	config_get tun_inbound_tag "core" "tun_inbound_tag"
-	config_get fake_ip_dns_server_tag "core" "fake_ip_dns_server_tag"
-	## proxy config
-	### general
-	local ipv4_proxy ipv6_proxy tcp_mode udp_mode tun_timeout tun_interval
-	config_get_bool ipv4_proxy "proxy" "ipv4_proxy" 0
-	config_get_bool ipv6_proxy "proxy" "ipv6_proxy" 0
-	config_get tcp_mode "proxy" "tcp_mode"
-	config_get udp_mode "proxy" "udp_mode"
-	config_get tun_timeout "proxy" "tun_timeout" 30
-	config_get tun_interval "proxy" "tun_interval" 1
-	## routing config
-	local tproxy_fw_mark tproxy_fw_mask tun_fw_mark tun_fw_mask tproxy_rule_pref tun_rule_pref tproxy_route_table tun_route_table cgroup_id cgroup_name dummy_device
-	config_get tproxy_fw_mark "routing" "tproxy_fw_mark" "0x80"
-	config_get tproxy_fw_mask "routing" "tproxy_fw_mask" "0xFF"
-	config_get tun_fw_mark "routing" "tun_fw_mark" "0x81"
-	config_get tun_fw_mask "routing" "tun_fw_mask" "0xFF"
-	config_get tproxy_rule_pref "routing" "tproxy_rule_pref" "1024"
-	config_get tun_rule_pref "routing" "tun_rule_pref" "1025"
-	config_get tproxy_route_table "routing" "tproxy_route_table" "80"
-	config_get tun_route_table "routing" "tun_route_table" "81"
-	config_get cgroup_id "routing" "cgroup_id" "0x12061206"
-	config_get cgroup_name "routing" "cgroup_name" "gg"
-	config_get dummy_device "routing" "dummy_device" "gg-dummy"
-	# prepare config
-	local tproxy_enable; tproxy_enable=0
-	if [ "$tcp_mode" = "tproxy" ] || [ "$udp_mode" = "tproxy" ]; then
-		tproxy_enable=1
-	fi
-	local tun_enable; tun_enable=0
-	if [ "$tcp_mode" = "tun" ] || [ "$udp_mode" = "tun" ]; then
-		tun_enable=1
-	fi
-	local tun_device; tun_device=$(jsonfilter -q -i "$RUN_PROFILE_PATH" -e "@['inbounds'][*]" | jsonfilter -q -a -e "@[@['tag']='$tun_inbound_tag']" | jsonfilter -q -a -e "@[@['type']='tun']" | jsonfilter -q -e "@['interface_name']")
-	local fake_ip6_range; fake_ip6_range=$(jsonfilter -q -i "$RUN_PROFILE_PATH" -e "@['dns']['servers'][*]" | jsonfilter -q -a -e "@[@['tag']='$fake_ip_dns_server_tag']" | jsonfilter -q -e "@['inet6_range']")
-	if [ "$core_only" = 0 ]; then
-		# proxy
-		log "Proxy" "Enabled."
-		# wait for tun device online
-		if [ "$tun_enable" = 1 ]; then
-			log "Proxy" "Waiting for tun device online within $tun_timeout seconds..."
-			while [ "$tun_timeout" -gt 0 ]; do
-				if ip -j link show dev "$tun_device" 2>/dev/null | jsonfilter -q -e "@[@['flags'][@='UP']]" > /dev/null 2>&1; then
-					log "Proxy" "TUN device is online."
-					break
-				fi
-				tun_timeout=$((tun_timeout - tun_interval))
-				sleep "$tun_interval"
-			done
-			if [ "$tun_timeout" -le 0 ]; then
-				log "Proxy" "Timeout, TUN device is not online."
-				log "App" "Exit."
-				return
-			fi
-		fi
-		# fix compatible with dockerd
-		## cgroupfs-mount
-		### when cgroupfs-mount is installed, cgroupv1 will mounted instead of cgroupv2, we need to create cgroup manually
-		if mount | grep -q -w "^cgroup"; then
-			mkdir -p "/sys/fs/cgroup/net_cls/$cgroup_name"
-			echo "$cgroup_id" > "/sys/fs/cgroup/net_cls/$cgroup_name/net_cls.classid"
-			cat "$PID_FILE_PATH" > "/sys/fs/cgroup/net_cls/$cgroup_name/cgroup.procs"
-		fi
-		## kmod-br-netfilter
-		### when kmod-br-netfilter is loaded, bridge-nf-call-iptables and bridge-nf-call-ip6tables are set to 1, we need to set them to 0 if tproxy is enabled
-		if [ "$tproxy_enable" = 1 ] && (lsmod | grep -q br_netfilter); then
-			if [ "$ipv4_proxy" = 1 ]; then
-				local bridge_nf_call_iptables; bridge_nf_call_iptables=$(sysctl -e -n net.bridge.bridge-nf-call-iptables)
-				if [ "$bridge_nf_call_iptables" = 1 ]; then
-					touch "$BRIDGE_NF_CALL_IPTABLES_FLAG_PATH"
-					sysctl -q -w net.bridge.bridge-nf-call-iptables=0
-				fi
-			fi
-			if [ "$ipv6_proxy" = 1 ]; then
-				local bridge_nf_call_ip6tables; bridge_nf_call_ip6tables=$(sysctl -e -n net.bridge.bridge-nf-call-ip6tables)
-				if [ "$bridge_nf_call_ip6tables" = 1 ]; then
-					touch "$BRIDGE_NF_CALL_IP6TABLES_FLAG_PATH"
-					sysctl -q -w net.bridge.bridge-nf-call-ip6tables=0
-				fi
-			fi
-		fi
-		# ip route and rule
-		if [ "$tproxy_enable" = 1 ]; then
-			if [ "$ipv4_proxy" = 1 ]; then
-				ip -4 route add local default dev lo table "$tproxy_route_table"
-				ip -4 rule add pref "$tproxy_rule_pref" fwmark "$tproxy_fw_mark/$tproxy_fw_mask" table "$tproxy_route_table"
-			fi
-			if [ "$ipv6_proxy" = 1 ]; then
-				ip -6 route add local default dev lo table "$tproxy_route_table"
-				ip -6 rule add pref "$tproxy_rule_pref" fwmark "$tproxy_fw_mark/$tproxy_fw_mask" table "$tproxy_route_table"
-			fi
-		fi
-		if [ "$tun_enable" = 1 ]; then
-			if [ "$ipv4_proxy" = 1 ]; then
-				ip -4 route add unicast default dev "$tun_device" table "$tun_route_table"
-				ip -4 rule add pref "$tun_rule_pref" fwmark "$tun_fw_mark/$tun_fw_mask" table "$tun_route_table"
-			fi
-			if [ "$ipv6_proxy" = 1 ]; then
-				ip -6 route add unicast default dev "$tun_device" table "$tun_route_table"
-				ip -6 rule add pref "$tun_rule_pref" fwmark "$tun_fw_mark/$tun_fw_mask" table "$tun_route_table"
-			fi
-			$FIREWALL_INCLUDE_SH
-		fi
-		if [ -n "$fake_ip6_range" ]; then
-			ip link add "$dummy_device" type dummy
-			ip link set dev "$dummy_device" up
-			ip -6 route add "$fake_ip6_range" dev "$dummy_device"
-		fi
-		# hijack
-		utpl -S "$HIJACK_UT" | nft -f -
-		# check hijack
-		if nft list tables | grep -q gg; then
-			log "Proxy" "Hijack successful."
-		else
-			log "Proxy" "Hijack failed."
-			log "App" "Exit."
-		fi
-	fi
-}
-
 service_stopped() {
 	cleanup
 }
@@ -401,50 +200,14 @@ cleanup() {
 	## log config
 	local log_clear_at_stop
 	config_get_bool log_clear_at_stop "log" "clear_at_stop" 0
-	## routing config
-	local tproxy_route_table tun_route_table dummy_device
-	config_get tproxy_route_table "routing" "tproxy_route_table" "80"
-	config_get tun_route_table "routing" "tun_route_table" "81"
-	config_get dummy_device "routing" "dummy_device" "gg-dummy"
 	# clear logs if needed
 	if [  "$log_clear_at_stop" = 1 ]; then
 		echo -n > "$APP_LOG_PATH"
 		echo -n > "$CORE_LOG_PATH"
 		log "Log" "Logs are cleared due to clear at stop is enabled."
 	fi
-	# delete routing policy
-	ip -4 rule del table "$tproxy_route_table" > /dev/null 2>&1
-	ip -4 rule del table "$tun_route_table" > /dev/null 2>&1
-	ip -6 rule del table "$tproxy_route_table" > /dev/null 2>&1
-	ip -6 rule del table "$tun_route_table" > /dev/null 2>&1
-	# delete routing table
-	ip -4 route flush table "$tproxy_route_table" > /dev/null 2>&1
-	ip -4 route flush table "$tun_route_table" > /dev/null 2>&1
-	ip -6 route flush table "$tproxy_route_table" > /dev/null 2>&1
-	ip -6 route flush table "$tun_route_table" > /dev/null 2>&1
-	# delete dummy device
-	ip -6 link del "$dummy_device" > /dev/null 2>&1
-	# delete hijack
-	nft delete table inet gg > /dev/null 2>&1
-	local handles handle
-	handles=$(nft --json list table inet fw4 | jsonfilter -q -e "@['nftables'][*]['rule']" | jsonfilter -q -a -e "@[@['chain']='input']" | jsonfilter -q -a -e "@[@['comment']='gg']" | jsonfilter -q -a -e "@[*]['handle']")
-	for handle in $handles; do
-		nft delete rule inet fw4 input handle "$handle"
-	done
-	handles=$(nft --json list table inet fw4 | jsonfilter -q -e "@['nftables'][*]['rule']" | jsonfilter -q -a -e "@[@['chain']='forward']" | jsonfilter -q -a -e "@[@['comment']='gg']" | jsonfilter -q -a -e "@[*]['handle']")
-	for handle in $handles; do
-		nft delete rule inet fw4 forward handle "$handle"
-	done
 	# delete started flag
 	rm "$STARTED_FLAG_PATH" > /dev/null 2>&1
-	# revert fix compatible with dockerd
-	## kmod-br-netfilter
-	if rm "$BRIDGE_NF_CALL_IPTABLES_FLAG_PATH" > /dev/null 2>&1; then
-		sysctl -q -w net.bridge.bridge-nf-call-iptables=1
-	fi
-	if rm "$BRIDGE_NF_CALL_IP6TABLES_FLAG_PATH" > /dev/null 2>&1; then
-		sysctl -q -w net.bridge.bridge-nf-call-ip6tables=1
-	fi
 	# delete cron
 	if grep -q "#gg" "/etc/crontabs/root"; then
 		sed -i "/#gg/d" "/etc/crontabs/root" > /dev/null 2>&1

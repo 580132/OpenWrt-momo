@@ -73,25 +73,6 @@ if (exists(result, "subscription")) {
 		}
 	}
 }
-if (exists(result, "lan_access_control")) {
-	for (let x in result["lan_access_control"]) {
-		if (exists(x, "ip")) {
-			for (let i = 0; i < length(x["ip"]); i++) {
-				x["ip"][i] = "*";
-			}
-		}
-		if (exists(x, "ip6")) {
-			for (let i = 0; i < length(x["ip6"]); i++) {
-				x["ip6"][i] = "*";
-			}
-		}
-		if (exists(x, "mac")) {
-			for (let i = 0; i < length(x["mac"]); i++) {
-				x["mac"][i] = "*";
-			}
-		}
-	}
-}
 delete result["placeholder"];
 print(result);
 '
@@ -288,46 +269,10 @@ print(desensitize_profile());
 ip rule list
 `
 \`\`\`
-## ip route
-\`\`\`
-TPROXY: 
-`
-ip route list table "$(uci get gg.routing.tproxy_route_table)"
-`
-
-TUN: 
-`
-ip route list table "$(uci get gg.routing.tun_route_table)"
-`
-\`\`\`
 ## ip6 rule
 \`\`\`
 `
 ip -6 rule list
-`
-\`\`\`
-## ip6 route
-\`\`\`
-TPROXY: 
-`
-ip -6 route list table "$(uci get gg.routing.tproxy_route_table)"
-`
-
-TUN: 
-`
-ip -6 route list table "$(uci get gg.routing.tun_route_table)"
-`
-\`\`\`
-## firewall tables
-\`\`\`
-`
-nft list tables
-`
-\`\`\`
-## firewall
-\`\`\`
-`
-nft list table inet gg
 `
 \`\`\`
 ## service

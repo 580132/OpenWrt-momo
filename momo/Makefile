@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gg
 PKG_VERSION:=2026.10.14
-PKG_RELEASE:=11
+PKG_RELEASE:=12
 
 PKG_LICENSE:=GPL-3.0+
 PKG_MAINTAINER:=Joseph Mory <morytyann@gmail.com>
@@ -14,7 +14,7 @@ define Package/gg
   CATEGORY:=Network
   TITLE:=Transparent Proxy with sing-box on OpenWrt (Core Only).
   URL:=https://github.com/nikkinikki-org
-  DEPENDS:=+ca-bundle +curl firewall4 +ip-full +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +sing-box
+  DEPENDS:=+ca-bundle +curl +sing-box
 endef
 
 define Package/gg/conffiles
@@ -31,11 +31,8 @@ define Package/gg/install
 	$(INSTALL_DIR) $(1)/etc/gg/core
 
 	$(INSTALL_BIN) $(CURDIR)/files/ucode/include.uc $(1)/etc/gg/ucode/include.uc
-	$(INSTALL_BIN) $(CURDIR)/files/ucode/mixin.uc $(1)/etc/gg/ucode/mixin.uc
-	$(INSTALL_BIN) $(CURDIR)/files/ucode/hijack.ut $(1)/etc/gg/ucode/hijack.ut
 
 	$(INSTALL_BIN) $(CURDIR)/files/scripts/include.sh $(1)/etc/gg/scripts/include.sh
-	$(INSTALL_BIN) $(CURDIR)/files/scripts/firewall_include.sh $(1)/etc/gg/scripts/firewall_include.sh
 	$(INSTALL_BIN) $(CURDIR)/files/scripts/debug.sh $(1)/etc/gg/scripts/debug.sh
 	$(INSTALL_BIN) $(CURDIR)/files/scripts/update_core.sh $(1)/etc/gg/scripts/update_core.sh
 
@@ -47,7 +44,6 @@ define Package/gg/install
 	$(INSTALL_BIN) $(CURDIR)/files/momo.init $(1)/etc/init.d/gg
 
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
-	$(INSTALL_BIN) $(CURDIR)/files/uci-defaults/init.sh $(1)/etc/uci-defaults/99_init_gg
 	$(INSTALL_BIN) $(CURDIR)/files/uci-defaults/migrate.sh $(1)/etc/uci-defaults/99_migrate_gg
 
 	$(INSTALL_DIR) $(1)/lib/upgrade/keep.d

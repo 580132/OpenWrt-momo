@@ -3,7 +3,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=luci-app-gg
 LUCI_NAME:=luci-app-gg
 PKG_VERSION:=1.2.2
-PKG_RELEASE:=11
+PKG_RELEASE:=12
 
 LUCI_TITLE:=LuCI Support for gg
 LUCI_DEPENDS:=+luci-base +gg

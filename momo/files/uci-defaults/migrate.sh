@@ -28,26 +28,20 @@ section_log=$(uci -q get gg.log); [ -z "$section_log" ] && {
 	uci set gg.log.scheduled_clear_size_limit_unit=MB
 }
 
-section_mixin=$(uci -q get gg.mixin); [ -z "$section_mixin" ] && {
-	uci set gg.mixin=mixin
-	uci set gg.mixin.log_disabled='0'
-	uci set gg.mixin.log_level='info'
-	uci set gg.mixin.log_timestamp='1'
-	uci set gg.mixin.dns_independent_cache='1'
-	uci set gg.mixin.dns_reverse_mapping='1'
-	uci set gg.mixin.cache_enabled='1'
-	uci set gg.mixin.cache_store_fakeip='1'
-	uci set gg.mixin.cache_store_rdrc='1'
-	uci set gg.mixin.external_control_ui_path='ui'
-	uci set gg.mixin.external_control_ui_download_url='https://github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip'
-}
-
 # since v1.2.1
 config_clear_at_stop=$(uci -q get gg.log.clear_at_stop); [ -z "$config_clear_at_stop" ] && uci set gg.log.clear_at_stop=1
 
 # firewall
-# gg never touches the firewall; drop the include left by earlier releases
+# gg never touches the firewall; drop the include left by earlier releases and
+# the geoip lists the proxy mode used to download
 uci -q del firewall.gg
+rm -f "/etc/gg/firewall/geoip_cn.nft" "/etc/gg/firewall/geoip6_cn.nft"
+rmdir "/etc/gg/firewall" 2> /dev/null
+
+# core only
+# the mode is fixed now: the toggle is gone from the ui and the service no
+# longer branches on it, so make sure no install is left claiming otherwise
+config_core_only=$(uci -q get gg.config.core_only); [ "$config_core_only" != 1 ] && uci set gg.config.core_only=1
 
 # core channel
 # the update button follows whatever channel is selected in App Config
