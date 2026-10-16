@@ -44,6 +44,12 @@ const callMomoUpdateSubscription = rpc.declare({
     expect: { '': {} }
 });
 
+const callMomoSubscriptionStatus = rpc.declare({
+    object: 'luci.gg',
+    method: 'subscription_status',
+    expect: { '': {} }
+});
+
 const callMomoDebug = rpc.declare({
     object: 'luci.gg',
     method: 'debug',
@@ -132,6 +138,10 @@ return baseclass.extend({
 
     updateSubscription: function (section_id) {
         return callMomoUpdateSubscription(section_id);
+    },
+
+    subscriptionStatus: function () {
+        return callMomoSubscriptionStatus();
     },
 
     

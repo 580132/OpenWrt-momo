@@ -40,6 +40,48 @@ function setOptionValue(map, section_id, name, value) {
     }
 }
 
+// The status cell renders the fields the backend stores on the subscription
+// section, and the status rpc returns exactly those fields, so the text is
+// built in one place and a refresh can just overwrite the cell content.
+function subscriptionStatusText(fields) {
+    if (fields.success !== '1') {
+        return _('Never updated');
+    }
+    const parts = [];
+    if (fields.update) {
+        parts.push(fields.update);
+    }
+    if (fields.used && fields.total) {
+        parts.push(fields.used + ' / ' + fields.total);
+    }
+    if (fields.expire) {
+        parts.push(_('Expires:') + ' ' + fields.expire);
+    }
+    return parts.join(' | ');
+}
+
+// Updating a subscription and reloading the service both rewrite the stored
+// status of the subscriptions, while the form keeps showing the values it read
+// when the page was loaded. Ask the backend for the stored ones and patch the
+// cells in place, so a row updates without a page reload. Reloading uci is not
+// an option here, uci.unload() also drops changes that are saved but not yet
+// applied.
+function refreshSubscriptionStatus() {
+    return guarded(function () {
+        return momo.subscriptionStatus();
+    }).then(function (statuses) {
+        for (const section_id in statuses) {
+            const cell = document.getElementById('sub_status_' + section_id);
+            if (cell) {
+                cell.textContent = subscriptionStatusText(statuses[section_id]);
+            }
+        }
+    }, function () {
+        // the table is only a view of the stored state, a failed refresh must
+        // not turn a successful action into a reported error
+    });
+}
+
 function refreshCoreInfo() {
     return guarded(function () {
         return momo.coreInfo();
@@ -275,7 +317,14 @@ return view.extend({
         o.inputstyle = 'action';
         o.inputtitle = _('Reload Service');
         o.onclick = function () {
-            return momo.reload();
+            // reloading re-fetches remote subscriptions, so the stored status
+            // of the rows changed too
+            return report(
+                guarded(function () {
+                    return momo.reload();
+                }).then(function () {
+                    return refreshSubscriptionStatus();
+                }));
         };
 
         o = s.option(form.Button, 'restart');
@@ -312,19 +361,16 @@ return view.extend({
         o.value('local', _('Local'));
 
         o = s.option(form.DummyValue, '_stat', _('Status'));
+        // table only: in the modal a second copy would duplicate the cell id
+        o.modalonly = false;
         o.cfgvalue = function (section_id) {
-            if (uci.get('gg', section_id, 'success') !== '1') {
-                return _('Never updated');
-            }
-            const parts = [];
-            const update = uci.get('gg', section_id, 'update');
-            const used = uci.get('gg', section_id, 'used');
-            const total = uci.get('gg', section_id, 'total');
-            const expire = uci.get('gg', section_id, 'expire');
-            if (update) { parts.push(update); }
-            if (used && total) { parts.push(used + ' / ' + total); }
-            if (expire) { parts.push(_('Expires:') + ' ' + expire); }
-            return parts.join(' | ');
+            return E('span', { id: 'sub_status_' + section_id }, subscriptionStatusText({
+                success: uci.get('gg', section_id, 'success'),
+                update: uci.get('gg', section_id, 'update'),
+                used: uci.get('gg', section_id, 'used'),
+                total: uci.get('gg', section_id, 'total'),
+                expire: uci.get('gg', section_id, 'expire')
+            }));
         };
 
         o = s.option(form.Button, '_refresh');
@@ -333,6 +379,8 @@ return view.extend({
         o.inputstyle = 'positive';
         o.inputtitle = _('Update');
         o.onclick = function (ev, section_id) {
+            // the button returning from its loading state is the confirmation,
+            // so no success notification, only failures are reported
             return report(
                 guarded(function () {
                     return momo.updateSubscription(section_id);
@@ -340,8 +388,9 @@ return view.extend({
                     if (!result?.success) {
                         throw new Error(_('Subscription update failed. Please check the app log for details.'));
                     }
-                }),
-                _('Subscription updated.'));
+                }).then(function () {
+                    return refreshSubscriptionStatus();
+                }));
         };
 
         s = m.section(form.TableSection, 'core_update', _('Core Update'));

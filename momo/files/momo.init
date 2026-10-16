@@ -12,6 +12,7 @@ extra_command 'update_subscription' 'Update subscription by section id'
 extra_command 'clear_logs' 'Clear logs if size exceeds the limit'
 extra_command 'update_core' 'Update the sing-box core to the latest stable or preview release'
 extra_command 'rollback_core' 'Rollback the sing-box core to the previous version'
+extra_command 'subscription_status' 'Print the stored update status of every subscription'
 
 boot_func() {
 	# prepare files
@@ -368,4 +369,32 @@ update_core() {
 
 rollback_core() {
 	"$UPDATE_CORE_SH" rollback
+}
+
+subscription_status() {
+	# load config
+	config_load gg
+	# the ui patches the subscription rows from this after updating one or
+	# reloading the service, so print the stored status as json
+	json_init
+	config_foreach subscription_status_section subscription
+	json_dump
+	json_cleanup
+}
+
+subscription_status_section() {
+	local section; section="$1"
+	local success update used total expire
+	config_get success "$section" "success"
+	config_get update "$section" "update"
+	config_get used "$section" "used"
+	config_get total "$section" "total"
+	config_get expire "$section" "expire"
+	json_add_object "$section"
+	json_add_string success "$success"
+	json_add_string update "$update"
+	json_add_string used "$used"
+	json_add_string total "$total"
+	json_add_string expire "$expire"
+	json_close_object
 }

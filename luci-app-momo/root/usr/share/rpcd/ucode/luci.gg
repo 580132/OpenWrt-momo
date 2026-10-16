@@ -53,6 +53,21 @@ const methods = {
 			return { success: success };
 		}
 	},
+	subscription_status: {
+		call: function() {
+			let result = {};
+			// the service prints the stored status of every subscription
+			const process = popen(`service gg subscription_status`);
+			if (process) {
+				const data = json(process);
+				process.close();
+				if (type(data) == 'object') {
+					result = data;
+				}
+			}
+			return result;
+		}
+	},
 	debug: {
 		call: function() {
 			const paths = get_paths();
