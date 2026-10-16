@@ -58,7 +58,7 @@ return view.extend({
         o = s.taboption('app_log', form.Button, 'clear_app_log');
         o.inputstyle = 'negative';
         o.inputtitle = _('Clear Log');
-        o.onclick = function (_, section_id) {
+        o.onclick = function (ev, section_id) {
             m.lookupOption('_app_log', section_id)[0].getUIElement(section_id).setValue('');
             return momo.clearAppLog();
         };
@@ -81,7 +81,7 @@ return view.extend({
 
         o = s.taboption('app_log', form.Button, 'scroll_app_log_to_bottom');
         o.inputtitle = _('Scroll To Bottom');
-        o.onclick = function (_, section_id) {
+        o.onclick = function (ev, section_id) {
             const element = m.lookupOption('_app_log', section_id)[0].getUIElement(section_id).node.firstChild;
             element.scrollTop = element.scrollHeight;
         };
@@ -91,7 +91,7 @@ return view.extend({
         o = s.taboption('core_log', form.Button, 'clear_core_log');
         o.inputstyle = 'negative';
         o.inputtitle = _('Clear Log');
-        o.onclick = function (_, section_id) {
+        o.onclick = function (ev, section_id) {
             m.lookupOption('_core_log', section_id)[0].getUIElement(section_id).setValue('');
             return momo.clearCoreLog();
         };
@@ -114,7 +114,7 @@ return view.extend({
 
         o = s.taboption('core_log', form.Button, 'scroll_core_log_to_bottom');
         o.inputtitle = _('Scroll To Bottom');
-        o.onclick = function (_, section_id) {
+        o.onclick = function (ev, section_id) {
             const element = m.lookupOption('_core_log', section_id)[0].getUIElement(section_id).node.firstChild;
             element.scrollTop = element.scrollHeight;
         };

@@ -326,7 +326,7 @@ return view.extend({
 
         o = s.option(form.Button, '_refresh');
         o.inputtitle = _('Update');
-        o.onclick = function (_, section_id) {
+        o.onclick = function (ev, section_id) {
             return report(
                 guarded(function () {
                     return momo.updateSubscription(section_id);
@@ -368,7 +368,7 @@ return view.extend({
         o = s.option(form.Button, 'check_core_update');
         o.inputstyle = 'action';
         o.inputtitle = _('Check for Updates');
-        o.onclick = function (_, section_id) {
+        o.onclick = function (ev, section_id) {
             return guarded(function () {
                 return runCoreCheck(m, section_id, latestVersions);
             });
