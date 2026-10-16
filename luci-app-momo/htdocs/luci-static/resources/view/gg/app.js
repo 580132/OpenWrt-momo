@@ -271,6 +271,19 @@ return view.extend({
             });
         });
 
+        o = s.option(form.Button, 'reload');
+        o.inputstyle = 'action';
+        o.inputtitle = _('Reload Service');
+        o.onclick = function () {
+            return momo.reload();
+        };
+
+        o = s.option(form.Button, 'restart');
+        o.inputstyle = 'negative';
+        o.inputtitle = _('Restart Service');
+        o.onclick = function () {
+            return momo.restart();
+        };
 
         s = m.section(form.GridSection, 'subscription', _('Subscriptions'));
         s.addremove = true;
@@ -410,20 +423,6 @@ return view.extend({
         o.value('preview', _('Preview'));
         o.default = 'stable';
         o.rmempty = false;
-        o = s.option(form.Button, 'reload');
-        o.inputstyle = 'action';
-        o.inputtitle = _('Reload Service');
-        o.onclick = function () {
-            return momo.reload();
-        };
-
-        o = s.option(form.Button, 'restart');
-        o.inputstyle = 'negative';
-        o.inputtitle = _('Restart Service');
-        o.onclick = function () {
-            return momo.restart();
-        };
-
         o = s.option(form.Value, 'start_delay', _('Start Delay'));
         o.datatype = 'uinteger';
         o.placeholder = _('Start Immidiately');
