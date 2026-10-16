@@ -8,13 +8,6 @@ section_placeholder=$(uci -q get gg.placeholder); [ -z "$section_placeholder" ] 
 
 # since v1.1.0
 
-proxy_bypass_china_mainland_ip=$(uci -q get gg.proxy.bypass_china_mainland_ip)
-proxy_bypass_china_mainland_ip6=$(uci -q get gg.proxy.bypass_china_mainland_ip6)
-[ -z "$proxy_bypass_china_mainland_ip6" ] && uci set gg.proxy.bypass_china_mainland_ip6=$proxy_bypass_china_mainland_ip
-
-routing_tproxy_fw_mask=$(uci -q get gg.routing.tproxy_fw_mask); [ -z "$routing_tproxy_fw_mask" ] && uci set gg.routing.tproxy_fw_mask=0xFF
-routing_tun_fw_mask=$(uci -q get gg.routing.tun_fw_mask); [ -z "$routing_tun_fw_mask" ] && uci set gg.routing.tun_fw_mask=0xFF
-
 procd=$(uci -q get gg.procd); [ -z "$procd" ] && {
 	uci set gg.procd=procd
 	uci set gg.procd.fast_reload=$(uci -q get gg.config.fast_reload)
@@ -22,8 +15,6 @@ procd=$(uci -q get gg.procd); [ -z "$procd" ] && {
 }
 
 # since v1.1.1
-
-dummy_device=$(uci -q get gg.routing.dummy_device); [ -z "$dummy_device" ] && uci set gg.routing.dummy_device=gg-dummy
 
 # since v1.1.2
 
