@@ -6,7 +6,7 @@
 	import { readfile } from 'fs';
 	import { cursor } from 'uci';
 	import { connect } from 'ubus';
-	import { uci_bool, uci_array, get_cgroups_version, get_users, get_groups, get_cgroups, load_profile } from '/etc/momo/ucode/include.uc';
+	import { uci_bool, uci_array, get_cgroups_version, get_users, get_groups, get_cgroups, load_profile } from '/etc/gg/ucode/include.uc';
 
 	const fw4 = require('fw4');
 
@@ -21,7 +21,7 @@
 
 	const profile = load_profile();
 
-	uci.load('momo');
+	uci.load('gg');
 
 	let redir_port;
 	let tproxy_port;
@@ -30,11 +30,11 @@
 	let fake_ip_range;
 	let fake_ip6_range;
 
-	const redirect_inbound_tag = uci.get('momo', 'core', 'redirect_inbound_tag');
-	const tproxy_inbound_tag = uci.get('momo', 'core', 'tproxy_inbound_tag');
-	const tun_inbound_tag = uci.get('momo', 'core', 'tun_inbound_tag');
-	const dns_inbound_tag = uci.get('momo', 'core', 'dns_inbound_tag');
-	const fake_ip_dns_server_tag = uci.get('momo', 'core', 'fake_ip_dns_server_tag');
+	const redirect_inbound_tag = uci.get('gg', 'core', 'redirect_inbound_tag');
+	const tproxy_inbound_tag = uci.get('gg', 'core', 'tproxy_inbound_tag');
+	const tun_inbound_tag = uci.get('gg', 'core', 'tun_inbound_tag');
+	const dns_inbound_tag = uci.get('gg', 'core', 'dns_inbound_tag');
+	const fake_ip_dns_server_tag = uci.get('gg', 'core', 'fake_ip_dns_server_tag');
 
 	let profile_array;
 	profile_array = filter(profile['inbounds'], (x) => x['tag'] == redirect_inbound_tag);
@@ -59,17 +59,17 @@
 		fake_ip6_range = profile_array[0]['inet6_range'];
 	}
 
-	const ipv4_dns_hijack = uci_bool(uci.get('momo', 'proxy', 'ipv4_dns_hijack'));
-	const ipv6_dns_hijack = uci_bool(uci.get('momo', 'proxy', 'ipv6_dns_hijack'));
-	const ipv4_proxy = uci_bool(uci.get('momo', 'proxy', 'ipv4_proxy'));
-	const ipv6_proxy = uci_bool(uci.get('momo', 'proxy', 'ipv6_proxy'));
-	const fake_ip_ping_hijack = uci_bool(uci.get('momo', 'proxy', 'fake_ip_ping_hijack'));
-	const tcp_mode = uci.get('momo', 'proxy', 'tcp_mode');
-	const udp_mode = uci.get('momo', 'proxy', 'udp_mode');
+	const ipv4_dns_hijack = uci_bool(uci.get('gg', 'proxy', 'ipv4_dns_hijack'));
+	const ipv6_dns_hijack = uci_bool(uci.get('gg', 'proxy', 'ipv6_dns_hijack'));
+	const ipv4_proxy = uci_bool(uci.get('gg', 'proxy', 'ipv4_proxy'));
+	const ipv6_proxy = uci_bool(uci.get('gg', 'proxy', 'ipv6_proxy'));
+	const fake_ip_ping_hijack = uci_bool(uci.get('gg', 'proxy', 'fake_ip_ping_hijack'));
+	const tcp_mode = uci.get('gg', 'proxy', 'tcp_mode');
+	const udp_mode = uci.get('gg', 'proxy', 'udp_mode');
 
-	const router_proxy = uci_bool(uci.get('momo', 'proxy', 'router_proxy'));
+	const router_proxy = uci_bool(uci.get('gg', 'proxy', 'router_proxy'));
 	const router_access_control = [];
-	uci.foreach('momo', 'router_access_control', (access_control) => {
+	uci.foreach('gg', 'router_access_control', (access_control) => {
 		access_control['enabled'] = uci_bool(access_control['enabled']);
 		access_control['user'] = filter(uci_array(access_control['user']), (x) => index(users, x) >= 0);
 		access_control['group'] = filter(uci_array(access_control['group']), (x) => index(groups, x) >= 0);
@@ -81,8 +81,8 @@
 		}
 	});
 
-	const lan_proxy = uci_bool(uci.get('momo', 'proxy', 'lan_proxy'));
-	const lan_inbound_interface = uci_array(uci.get('momo', 'proxy', 'lan_inbound_interface'));
+	const lan_proxy = uci_bool(uci.get('gg', 'proxy', 'lan_proxy'));
+	const lan_inbound_interface = uci_array(uci.get('gg', 'proxy', 'lan_inbound_interface'));
 	const lan_inbound_device = [];
 	for (let interface in lan_inbound_interface) {
 		const status = ubus.call('network.interface', 'status', { 'interface': interface });
@@ -92,7 +92,7 @@
 		}
 	}
 	const lan_access_control = [];
-	uci.foreach('momo', 'lan_access_control', (access_control) => {
+	uci.foreach('gg', 'lan_access_control', (access_control) => {
 		access_control['enabled'] = uci_bool(access_control['enabled']);
 		access_control['ip'] = uci_array(access_control['ip']);
 		access_control['ip6'] = uci_array(access_control['ip6']);
@@ -104,15 +104,15 @@
 		}
 	});
 
-	const reserved_ip = uci_array(uci.get('momo', 'proxy', 'reserved_ip'));
-	const reserved_ip6 = uci_array(uci.get('momo', 'proxy', 'reserved_ip6'));
-	const bypass_china_mainland_ip = uci_bool(uci.get('momo', 'proxy', 'bypass_china_mainland_ip'));
-	const bypass_china_mainland_ip6 = uci_bool(uci.get('momo', 'proxy', 'bypass_china_mainland_ip6'));
-	const proxy_tcp_dport = split((uci.get('momo', 'proxy', 'proxy_tcp_dport') ?? '0-65535'), ' ');
-	const proxy_udp_dport = split((uci.get('momo', 'proxy', 'proxy_udp_dport') ?? '0-65535'), ' ');
-	const bypass_dscp = uci_array(uci.get('momo', 'proxy', 'bypass_dscp'));
+	const reserved_ip = uci_array(uci.get('gg', 'proxy', 'reserved_ip'));
+	const reserved_ip6 = uci_array(uci.get('gg', 'proxy', 'reserved_ip6'));
+	const bypass_china_mainland_ip = uci_bool(uci.get('gg', 'proxy', 'bypass_china_mainland_ip'));
+	const bypass_china_mainland_ip6 = uci_bool(uci.get('gg', 'proxy', 'bypass_china_mainland_ip6'));
+	const proxy_tcp_dport = split((uci.get('gg', 'proxy', 'proxy_tcp_dport') ?? '0-65535'), ' ');
+	const proxy_udp_dport = split((uci.get('gg', 'proxy', 'proxy_udp_dport') ?? '0-65535'), ' ');
+	const bypass_dscp = uci_array(uci.get('gg', 'proxy', 'bypass_dscp'));
 	const bypass_fwmark = [];
-	for (let fwmark in uci_array(uci.get('momo', 'proxy', 'bypass_fwmark'))) {
+	for (let fwmark in uci_array(uci.get('gg', 'proxy', 'bypass_fwmark'))) {
 		let mark;
 		let mask = '0xFFFFFFFF';
 		if (index(fwmark, '/') >= 0) {
@@ -125,13 +125,13 @@
 		push(bypass_fwmark, { mark: mark, mask: mask });
 	}
 
-	const cgroup_id = uci.get('momo', 'routing', 'cgroup_id') ?? '0x07250725';
-	const cgroup_name = uci.get('momo', 'routing', 'cgroup_name') ?? 'momo';
-	const tproxy_fw_mark = uci.get('momo', 'routing', 'tproxy_fw_mark') ?? '0x80';
-	const tproxy_fw_mask = uci.get('momo', 'routing', 'tproxy_fw_mask') ?? '0xFF';
+	const cgroup_id = uci.get('gg', 'routing', 'cgroup_id') ?? '0x07250725';
+	const cgroup_name = uci.get('gg', 'routing', 'cgroup_name') ?? 'gg';
+	const tproxy_fw_mark = uci.get('gg', 'routing', 'tproxy_fw_mark') ?? '0x80';
+	const tproxy_fw_mask = uci.get('gg', 'routing', 'tproxy_fw_mask') ?? '0xFF';
 	const tproxy_fw_umask = fw4.hex(~tproxy_fw_mask & 0xFFFFFFFF);
-	const tun_fw_mark = uci.get('momo', 'routing', 'tun_fw_mark') ?? '0x81';
-	const tun_fw_mask = uci.get('momo', 'routing', 'tun_fw_mask') ?? '0xFF';
+	const tun_fw_mark = uci.get('gg', 'routing', 'tun_fw_mark') ?? '0x81';
+	const tun_fw_mask = uci.get('gg', 'routing', 'tun_fw_mask') ?? '0xFF';
 	const tun_fw_umask = fw4.hex(~tun_fw_mask & 0xFFFFFFFF);
 
 	const dns_hijack_nfproto = [];
@@ -159,7 +159,7 @@
 	}
 -%}
 
-table inet momo {
+table inet gg {
 	set dns_hijack_nfproto {
 		type nf_proto
 		flags interval
@@ -613,8 +613,8 @@ table inet momo {
 }
 
 {% if (bypass_china_mainland_ip): %}
-include "/etc/momo/firewall/geoip_cn.nft"
+include "/etc/gg/firewall/geoip_cn.nft"
 {% endif %}
 {% if (bypass_china_mainland_ip6): %}
-include "/etc/momo/firewall/geoip6_cn.nft"
+include "/etc/gg/firewall/geoip6_cn.nft"
 {% endif %}

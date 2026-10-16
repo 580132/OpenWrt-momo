@@ -3,7 +3,7 @@
 'use strict';
 
 import { popen, readfile, stat } from 'fs';
-import { get_paths, merge_exists } from '/etc/momo/ucode/include.uc';
+import { get_paths, merge_exists } from '/etc/gg/ucode/include.uc';
 
 const methods = {
 	get_paths: {
@@ -21,13 +21,13 @@ const methods = {
 			if (system('command -v apk') == 0) {
 				// strip the package name instead of cutting on the dashes, the
 				// name has dashes of its own and the version carries a -r suffix
-				process = popen(`apk list -I luci-app-momo-core | cut -d ' ' -f 1 | sed 's/^luci-app-momo-core-//'`);
+				process = popen(`apk list -I luci-app-gg | cut -d ' ' -f 1 | sed 's/^luci-app-gg-//'`);
 				if (process) {
 					app = trim(process.read('all'));
 					process.close();
 				}
 			} else if (system('command -v opkg') == 0) {
-				process = popen(`opkg list-installed luci-app-momo-core | cut -d ' ' -f 3`);
+				process = popen(`opkg list-installed luci-app-gg | cut -d ' ' -f 3`);
 				if (process) {
 					app = trim(process.read('all'));
 					process.close();
@@ -40,6 +40,24 @@ const methods = {
 				process.close();
 			}
 			return { app: app, core: core };
+		}
+	},
+	update_subscription: {
+		args: { section_id: 'section_id' },
+		call: function(req) {
+			let success = false;
+			const section_id = req.args?.section_id;
+			if (section_id) {
+				success = system(['service', 'gg', 'update_subscription', section_id]) == 0;
+			}
+			return { success: success };
+		}
+	},
+	debug: {
+		call: function() {
+			const paths = get_paths();
+			const success = system(`${paths.debug_sh} > ${paths.debug_log_path}`) == 0;
+			return { success: success };
 		}
 	},
 	core_info: {
@@ -106,4 +124,4 @@ const methods = {
 	}
 };
 
-return { 'luci.momo': methods };
+return { 'luci.gg': methods };

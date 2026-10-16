@@ -1,0 +1,29 @@
+{
+    "luci-app-gg": {
+        "description": "Grant access to gg procedures",
+        "read": {
+            "uci": [ "gg" ],
+            "ubus": {
+                "rc": [ "*" ],
+                "luci.gg": [ "*" ]
+            },
+            "file": {
+                "/etc/gg/profiles/*.json": ["read"],
+                "/etc/gg/subscriptions/*.json": ["read"],
+                "/etc/gg/run/config.json": ["read"],
+                "/var/log/gg/*.log": ["read"],
+                "/tmp/log/gg/*.log": ["read"]
+            }
+        },
+        "write": {
+            "uci": [ "gg" ],
+            "file": {
+                "/etc/gg/profiles/*.json": ["write"],
+                "/etc/gg/subscriptions/*.json": ["write"],
+                "/etc/gg/run/config.json": ["write"],
+                "/var/log/gg/*.log": ["write"],
+                "/tmp/log/gg/*.log": ["write"]
+            }
+        }
+    }
+}

@@ -4,7 +4,7 @@
 'require uci';
 'require poll';
 'require ui';
-'require tools.momo as momo';
+'require tools.gg as momo';
 
 function renderStatus(running) {
     return updateStatus(E('input', { id: 'core_status', style: 'border: unset; font-style: italic; font-weight: bold;', readonly: '' }), running);
@@ -207,7 +207,7 @@ function startCoreUpdate(promise) {
 return view.extend({
     load: function () {
         return Promise.all([
-            uci.load('momo'),
+            uci.load('gg'),
             momo.version(),
             momo.status(),
             momo.listProfiles(),
@@ -218,7 +218,7 @@ return view.extend({
         ]);
     },
     render: function (data) {
-        const subscriptions = uci.sections('momo', 'subscription');
+        const subscriptions = uci.sections('gg', 'subscription');
         const appVersion = data[1].app ?? '';
         const coreVersion = data[1].core ?? '';
         const running = data[2];
@@ -228,7 +228,7 @@ return view.extend({
 
         let m, s, o;
 
-        m = new form.Map('momo', _('Momo (Core Only)'), _('Core-only manager: subscriptions, core update and service control.'));
+        m = new form.Map('gg', _('GG'), _('Core-only manager: subscriptions, core update and service control.'));
 
         s = m.section(form.TableSection, 'placeholder', _('Status'));
         s.anonymous = true;
@@ -270,12 +270,56 @@ return view.extend({
             return momo.restart();
         };
 
+
+        s = m.section(form.GridSection, 'subscription', _('Subscriptions'));
+        s.addremove = true;
+        s.anonymous = true;
+        s.sortable = false;
+
+        o = s.option(form.Value, 'name', _('Name'));
+        o.rmempty = false;
+
+        o = s.option(form.Value, 'url', _('Subscription URL'));
+        o.rmempty = false;
+
+        o = s.option(form.Value, 'info_url', _('Info URL'));
+        o.optional = true;
+
+        o = s.option(form.Value, 'user_agent', _('User Agent'));
+        o.optional = true;
+
+        o = s.option(form.ListValue, 'prefer', _('Prefer'));
+        o.value('remote', _('Remote'));
+        o.value('local', _('Local'));
+
+        o = s.option(form.DummyValue, '_stat', _('Status'));
+        o.cfgvalue = function (section_id) {
+            if (uci.get('gg', section_id, 'success') !== '1') {
+                return _('Never updated');
+            }
+            const parts = [];
+            const update = uci.get('gg', section_id, 'update');
+            const used = uci.get('gg', section_id, 'used');
+            const total = uci.get('gg', section_id, 'total');
+            const expire = uci.get('gg', section_id, 'expire');
+            if (update) { parts.push(update); }
+            if (used && total) { parts.push(used + ' / ' + total); }
+            if (expire) { parts.push(_('Expires:') + ' ' + expire); }
+            return parts.join(' | ');
         };
 
-        o = s.option(form.Button, 'open_dashboard');
-        o.inputtitle = _('Open Dashboard');
-        o.onclick = function () {
-            return momo.openDashboard();
+        o = s.option(form.Button, '_refresh');
+        o.inputtitle = _('Update');
+        o.onclick = function (_, section_id) {
+            return report(
+                guarded(function () {
+                    return momo.updateSubscription(section_id);
+                }).then(function (result) {
+                    if (!result?.success) {
+                        throw new Error(_('Subscription update failed. Please check the app log for details.'));
+                    }
+                }),
+                _('Subscription updated.'));
         };
 
         s = m.section(form.TableSection, 'core_update', _('Core Update'));

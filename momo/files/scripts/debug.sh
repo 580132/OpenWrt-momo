@@ -1,13 +1,13 @@
 #!/bin/sh
 
-. "$IPKG_INSTROOT/etc/momo/scripts/include.sh"
+. "$IPKG_INSTROOT/etc/gg/scripts/include.sh"
 
 enabled=`uci get momo.config.enabled`
 
 if [ "$enabled" == "0" ]; then
 	uci set momo.config.enabled=1
 	uci commit momo
-	/etc/init.d/momo restart
+	/etc/init.d/gg restart
 fi
 
 echo \
@@ -29,10 +29,12 @@ uname -a
 \`\`\`
 `
 if [ -x "/bin/opkg" ]; then
-	opkg list-installed "momo"
+	opkg list-installed "gg"
+	opkg list-installed "luci-app-gg"
 	opkg list-installed "luci-app-momo"
 elif [ -x "/usr/bin/apk" ]; then
-	apk list -I "momo"
+	apk list -I "gg"
+	apk list -I "luci-app-gg"
 	apk list -I "luci-app-momo"
 fi
 `
@@ -45,7 +47,7 @@ import { cursor } from "uci";
 
 const uci = cursor();
 
-const config = uci.get_all("momo");
+const config = uci.get_all("gg");
 const result = {};
 
 for (let section_id in config) {
@@ -257,7 +259,7 @@ function desensitize_endpoints(endpoints) {
 }
 
 function desensitize_profile() {
-	const profile = json(readfile("/etc/momo/run/config.json"));
+	const profile = json(readfile("/etc/gg/run/config.json"));
 	if (exists(profile, "experimental") && exists(profile["experimental"], "clash_api") && exists(profile["experimental"]["clash_api"], "secret")) {
 		profile["secret"] = "*";
 	}
@@ -331,7 +333,7 @@ nft list table inet momo
 ## service
 \`\`\`json
 `
-/etc/init.d/momo info
+/etc/init.d/gg info
 `
 \`\`\`
 "
@@ -339,5 +341,5 @@ nft list table inet momo
 if [ "$enabled" == "0" ]; then
 	uci set momo.config.enabled=0
 	uci commit momo
-	/etc/init.d/momo restart
+	/etc/init.d/gg restart
 fi

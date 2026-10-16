@@ -26,77 +26,57 @@ const callFileWrite = rpc.declare({
 });
 
 const callMomoGetPaths = rpc.declare({
-    object: 'luci.momo',
+    object: 'luci.gg',
     method: 'get_paths',
     expect: { '': {} }
 });
 
 const callMomoVersion = rpc.declare({
-    object: 'luci.momo',
+    object: 'luci.gg',
     method: 'version',
     expect: { '': {} }
 });
 
-const callMomoProfile = rpc.declare({
-    object: 'luci.momo',
-    method: 'profile',
-    params: ['defaults'],
-    expect: { '': {} }
-});
-
 const callMomoUpdateSubscription = rpc.declare({
-    object: 'luci.momo',
+    object: 'luci.gg',
     method: 'update_subscription',
     params: ['section_id'],
     expect: { '': {} }
 });
 
-const callMomoAPI = rpc.declare({
-    object: 'luci.momo',
-    method: 'api',
-    params: ['method', 'path', 'query', 'body'],
-    expect: { '': {} }
-});
-
-const callMomoGetIdentifiers = rpc.declare({
-    object: 'luci.momo',
-    method: 'get_identifiers',
-    expect: { '': {} }
-});
-
 const callMomoDebug = rpc.declare({
-    object: 'luci.momo',
+    object: 'luci.gg',
     method: 'debug',
     expect: { '': {} }
 });
 
 const callMomoCoreInfo = rpc.declare({
-    object: 'luci.momo',
+    object: 'luci.gg',
     method: 'core_info',
     expect: { '': {} }
 });
 
 const callMomoCheckCoreUpdate = rpc.declare({
-    object: 'luci.momo',
+    object: 'luci.gg',
     method: 'check_core_update',
     expect: { '': {} }
 });
 
 const callMomoUpdateCore = rpc.declare({
-    object: 'luci.momo',
+    object: 'luci.gg',
     method: 'update_core',
     params: ['channel'],
     expect: { '': {} }
 });
 
 const callMomoRollbackCore = rpc.declare({
-    object: 'luci.momo',
+    object: 'luci.gg',
     method: 'rollback_core',
     expect: { '': {} }
 });
 
 const callMomoCoreUpdateStatus = rpc.declare({
-    object: 'luci.momo',
+    object: 'luci.gg',
     method: 'core_update_status',
     expect: { '': {} }
 });
@@ -107,15 +87,15 @@ return baseclass.extend({
     },
 
     status: async function () {
-        return (await callRCList('momo'))?.momo?.running;
+        return (await callRCList('gg'))?.gg?.running;
     },
 
     reload: function () {
-        return callRCInit('momo', 'reload');
+        return callRCInit('gg', 'reload');
     },
 
     restart: function () {
-        return callRCInit('momo', 'restart');
+        return callRCInit('gg', 'restart');
     },
 
     writefile: function (path, data, mode) {
@@ -150,41 +130,11 @@ return baseclass.extend({
         return callMomoVersion();
     },
 
-    profile: function (defaults) {
-        return callMomoProfile(defaults);
-    },
-
     updateSubscription: function (section_id) {
         return callMomoUpdateSubscription(section_id);
     },
 
-    updateDashboard: function () {
-        return callMomoAPI('POST', '/upgrade/ui');
-    },
-
-    openDashboard: async function () {
-        const profile = await callMomoProfile({ 'experimental': { 'clash_api': { 'external_controller': null, 'secret': null } } });
-        const apiListen = profile?.['experimental']?.['clash_api']?.['external_controller'];
-        const apiSecret = profile?.['experimental']?.['clash_api']?.['secret'] ?? '';
-        if (!apiListen) {
-            return Promise.reject('Clash API has not been configured');
-        }
-        const apiPort = apiListen.substring(apiListen.lastIndexOf(':') + 1);
-        const params = {
-            host: window.location.hostname,
-            hostname: window.location.hostname,
-            port: apiPort,
-            secret: apiSecret
-        };
-        const query = new URLSearchParams(params).toString();
-        const url = `http://${window.location.hostname}:${apiPort}/ui/?${query}`;
-        setTimeout(function () { window.open(url, '_blank') }, 0);
-        return Promise.resolve();
-    },
-
-    getIdentifiers: function () {
-        return callMomoGetIdentifiers();
-    },
+    
 
     listProfiles: async function () {
         const paths = await this.getPaths();

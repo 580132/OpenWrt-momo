@@ -246,6 +246,10 @@ msgstr "错误："
 msgid "Expire At"
 msgstr "到期时间"
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Expires:"
+msgstr "到期时间："
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/mixin.js:131
 msgid "External Control Config"
 msgstr "外部控制配置"
@@ -270,6 +274,11 @@ msgstr "快速重载"
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:31
 msgid "File:"
 msgstr "文件："
+
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "GG"
+msgstr "GG"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:352
 msgid "General Config"
@@ -326,6 +335,10 @@ msgstr "IPv6 代理"
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:110
 msgid "Inbound Interface"
 msgstr "入站接口"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Info URL"
+msgstr "信息链接"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:105
 msgid "LAN Proxy"
@@ -405,6 +418,10 @@ msgstr "NTP 服务地址"
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/mixin.js:101
 msgid "NTP Server Port"
 msgstr "NTP 服务端口"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Never updated"
+msgstr "从未更新"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:234
 msgid "None"
@@ -567,14 +584,30 @@ msgstr "订阅信息链接"
 msgid "Subscription Name"
 msgstr "订阅名称"
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Subscription URL"
+msgstr "订阅链接"
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:72
 msgid "Subscription Url"
 msgstr "订阅链接"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Subscription update failed. Please check the app log for details."
+msgstr "订阅更新失败，请查看插件日志了解详情。"
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Subscription updated."
+msgstr "订阅已更新。"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:329
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:35
 msgid "Subscription:"
 msgstr "订阅："
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Subscriptions"
+msgstr "订阅管理"
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:51
 msgid "TCP Mode"

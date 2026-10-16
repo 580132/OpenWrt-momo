@@ -5,7 +5,7 @@
 # paths
 
 ## home
-HOME_DIR="/etc/momo"
+HOME_DIR="/etc/gg"
 PROFILES_DIR="$HOME_DIR/profiles"
 SUBSCRIPTIONS_DIR="$HOME_DIR/subscriptions"
 
@@ -37,13 +37,13 @@ GEOIP_CN_NFT="$FIREWALL_DIR/geoip_cn.nft"
 GEOIP6_CN_NFT="$FIREWALL_DIR/geoip6_cn.nft"
 
 ## log
-LOG_DIR="/var/log/momo"
+LOG_DIR="/var/log/gg"
 APP_LOG_PATH="$LOG_DIR/app.log"
 CORE_LOG_PATH="$LOG_DIR/core.log"
 DEBUG_LOG_PATH="$LOG_DIR/debug.log"
 
 ## temp
-TEMP_DIR="/var/run/momo"
+TEMP_DIR="/var/run/gg"
 PID_FILE_PATH="$TEMP_DIR/momo.pid"
 STARTED_FLAG_PATH="$TEMP_DIR/started.flag"
 BRIDGE_NF_CALL_IPTABLES_FLAG_PATH="$TEMP_DIR/bridge_nf_call_iptables.flag"

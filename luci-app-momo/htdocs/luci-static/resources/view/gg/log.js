@@ -4,12 +4,12 @@
 'require uci';
 'require fs';
 'require poll';
-'require tools.momo as momo';
+'require tools.gg as momo';
 
 return view.extend({
     load: function () {
         return Promise.all([
-            uci.load('momo'),
+            uci.load('gg'),
             momo.getPaths(),
             momo.getAppLog(),
             momo.getCoreLog()
@@ -22,7 +22,7 @@ return view.extend({
 
         let m, s, o;
 
-        m = new form.Map('momo');
+        m = new form.Map('gg');
 
         s = m.section(form.NamedSection, 'log', 'log', _('Log'));
 

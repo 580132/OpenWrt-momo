@@ -6,7 +6,7 @@ USE_PROCD=1
 
 PROG="/usr/bin/sing-box"
 
-. "$IPKG_INSTROOT/etc/momo/scripts/include.sh"
+. "$IPKG_INSTROOT/etc/gg/scripts/include.sh"
 
 extra_command 'update_subscription' 'Update subscription by section id'
 extra_command 'clear_logs' 'Clear logs if size exceeds the limit'
@@ -17,7 +17,7 @@ boot_func() {
 	# prepare files
 	prepare_files
 	# load config
-	config_load momo
+	config_load gg
 	# start delay
 	local enabled start_delay
 	config_get_bool enabled "config" "enabled" 0
@@ -38,7 +38,7 @@ start_service() {
 	# prepare files
 	prepare_files
 	# load config
-	config_load momo
+	config_load gg
 	# check if enabled
 	local enabled
 	config_get_bool enabled "config" "enabled" 0
@@ -201,7 +201,7 @@ start_service() {
 	fi
 	# start core
 	log "Core" "Start."
-	procd_open_instance momo
+	procd_open_instance gg
 
 	procd_set_param command /bin/sh -c "$PROG -D $RUN_DIR run --disable-color >> $CORE_LOG_PATH 2>&1"
 	procd_set_param file "$RUN_PROFILE_PATH"
@@ -223,19 +223,19 @@ start_service() {
 	procd_close_instance
 	# cron
 	## clear cron
-	if grep -q "#momo" "/etc/crontabs/root"; then
+	if grep -q "#gg" "/etc/crontabs/root"; then
 		log "App" "Clear cron."
-		sed -i "/#momo/d" "/etc/crontabs/root" > /dev/null 2>&1
+		sed -i "/#gg/d" "/etc/crontabs/root" > /dev/null 2>&1
 	fi
 	## add restart cron if needed
 	if [ "$scheduled_restart" = 1 ] && [ -n "$scheduled_restart_cron" ]; then
 		log "App" "Set scheduled restart."
-		echo "$scheduled_restart_cron /etc/init.d/momo restart #momo scheduled restart" >> "/etc/crontabs/root"
+		echo "$scheduled_restart_cron /etc/init.d/gg restart #gg scheduled restart" >> "/etc/crontabs/root"
 	fi
 	## add log scheduled clear cron if needed
 	if [ "$log_scheduled_clear" = 1 ] && [ -n "$log_scheduled_clear_cron" ]; then
 		log "App" "Set log scheduled clear."
-		echo "$log_scheduled_clear_cron /etc/init.d/momo clear_logs #momo log scheduled clear" >> "/etc/crontabs/root"
+		echo "$log_scheduled_clear_cron /etc/init.d/gg clear_logs #gg log scheduled clear" >> "/etc/crontabs/root"
 	fi
 	# set started flag
 	touch "$STARTED_FLAG_PATH"
@@ -247,7 +247,7 @@ service_started() {
 		return
 	fi
 	# load config
-	config_load momo
+	config_load gg
 	# check if proxy enabled
 	local proxy_enabled
 	config_get_bool proxy_enabled "proxy" "enabled" 0
@@ -283,8 +283,8 @@ service_started() {
 	config_get tproxy_route_table "routing" "tproxy_route_table" "80"
 	config_get tun_route_table "routing" "tun_route_table" "81"
 	config_get cgroup_id "routing" "cgroup_id" "0x12061206"
-	config_get cgroup_name "routing" "cgroup_name" "momo"
-	config_get dummy_device "routing" "dummy_device" "momo-dummy"
+	config_get cgroup_name "routing" "cgroup_name" "gg"
+	config_get dummy_device "routing" "dummy_device" "gg-dummy"
 	# prepare config
 	local tproxy_enable; tproxy_enable=0
 	if [ "$tcp_mode" = "tproxy" ] || [ "$udp_mode" = "tproxy" ]; then
@@ -372,7 +372,7 @@ service_started() {
 		# hijack
 		utpl -S "$HIJACK_UT" | nft -f -
 		# check hijack
-		if nft list tables | grep -q momo; then
+		if nft list tables | grep -q gg; then
 			log "Proxy" "Hijack successful."
 		else
 			log "Proxy" "Hijack failed."
@@ -391,12 +391,12 @@ reload_service() {
 }
 
 service_triggers() {
-	procd_add_reload_trigger "momo"
+	procd_add_reload_trigger "gg"
 }
 
 cleanup() {
 	# load config
-	config_load momo
+	config_load gg
 	# get config
 	## log config
 	local log_clear_at_stop
@@ -405,7 +405,7 @@ cleanup() {
 	local tproxy_route_table tun_route_table dummy_device
 	config_get tproxy_route_table "routing" "tproxy_route_table" "80"
 	config_get tun_route_table "routing" "tun_route_table" "81"
-	config_get dummy_device "routing" "dummy_device" "momo-dummy"
+	config_get dummy_device "routing" "dummy_device" "gg-dummy"
 	# clear logs if needed
 	if [  "$log_clear_at_stop" = 1 ]; then
 		echo -n > "$APP_LOG_PATH"
@@ -425,13 +425,13 @@ cleanup() {
 	# delete dummy device
 	ip -6 link del "$dummy_device" > /dev/null 2>&1
 	# delete hijack
-	nft delete table inet momo > /dev/null 2>&1
+	nft delete table inet gg > /dev/null 2>&1
 	local handles handle
-	handles=$(nft --json list table inet fw4 | jsonfilter -q -e "@['nftables'][*]['rule']" | jsonfilter -q -a -e "@[@['chain']='input']" | jsonfilter -q -a -e "@[@['comment']='momo']" | jsonfilter -q -a -e "@[*]['handle']")
+	handles=$(nft --json list table inet fw4 | jsonfilter -q -e "@['nftables'][*]['rule']" | jsonfilter -q -a -e "@[@['chain']='input']" | jsonfilter -q -a -e "@[@['comment']='gg']" | jsonfilter -q -a -e "@[*]['handle']")
 	for handle in $handles; do
 		nft delete rule inet fw4 input handle "$handle"
 	done
-	handles=$(nft --json list table inet fw4 | jsonfilter -q -e "@['nftables'][*]['rule']" | jsonfilter -q -a -e "@[@['chain']='forward']" | jsonfilter -q -a -e "@[@['comment']='momo']" | jsonfilter -q -a -e "@[*]['handle']")
+	handles=$(nft --json list table inet fw4 | jsonfilter -q -e "@['nftables'][*]['rule']" | jsonfilter -q -a -e "@[@['chain']='forward']" | jsonfilter -q -a -e "@[@['comment']='gg']" | jsonfilter -q -a -e "@[*]['handle']")
 	for handle in $handles; do
 		nft delete rule inet fw4 forward handle "$handle"
 	done
@@ -446,14 +446,14 @@ cleanup() {
 		sysctl -q -w net.bridge.bridge-nf-call-ip6tables=1
 	fi
 	# delete cron
-	if grep -q "#momo" "/etc/crontabs/root"; then
-		sed -i "/#momo/d" "/etc/crontabs/root" > /dev/null 2>&1
+	if grep -q "#gg" "/etc/crontabs/root"; then
+		sed -i "/#gg/d" "/etc/crontabs/root" > /dev/null 2>&1
 	fi
 }
 
 clear_logs() {
 	# load config
-	config_load momo
+	config_load gg
 	# get config
 	## log config
 	local log_scheduled_clear_size_limit log_scheduled_clear_size_limit_unit
@@ -492,7 +492,7 @@ update_subscription() {
 		return
 	fi
 	# load config
-	config_load momo
+	config_load gg
 	# get subscription config
 	local subscription_name subscription_info_url subscription_url subscription_user_agent
 	config_get subscription_name "$subscription_section" "name"
@@ -500,14 +500,14 @@ update_subscription() {
 	config_get subscription_url "$subscription_section" "url"
 	config_get subscription_user_agent "$subscription_section" "user_agent"
 	# reset subscription info
-	uci_remove "momo" "$subscription_section" "expire" > /dev/null 2>&1
-	uci_remove "momo" "$subscription_section" "upload" > /dev/null 2>&1
-	uci_remove "momo" "$subscription_section" "download" > /dev/null 2>&1
-	uci_remove "momo" "$subscription_section" "total" > /dev/null 2>&1
-	uci_remove "momo" "$subscription_section" "used" > /dev/null 2>&1
-	uci_remove "momo" "$subscription_section" "avaliable" > /dev/null 2>&1
-	uci_remove "momo" "$subscription_section" "update" > /dev/null 2>&1
-	uci_remove "momo" "$subscription_section" "success" > /dev/null 2>&1
+	uci_remove "gg" "$subscription_section" "expire" > /dev/null 2>&1
+	uci_remove "gg" "$subscription_section" "upload" > /dev/null 2>&1
+	uci_remove "gg" "$subscription_section" "download" > /dev/null 2>&1
+	uci_remove "gg" "$subscription_section" "total" > /dev/null 2>&1
+	uci_remove "gg" "$subscription_section" "used" > /dev/null 2>&1
+	uci_remove "gg" "$subscription_section" "avaliable" > /dev/null 2>&1
+	uci_remove "gg" "$subscription_section" "update" > /dev/null 2>&1
+	uci_remove "gg" "$subscription_section" "success" > /dev/null 2>&1
 	# update subscription
 	log "Profile" "Update subscription: $subscription_name."
 	local success
@@ -555,26 +555,26 @@ update_subscription() {
 			fi
 			# update subscription info
 			if [ -n "$subscription_expire" ]; then
-				uci_set "momo" "$subscription_section" "expire" "$(date "+%Y-%m-%d %H:%M:%S" -d "@$subscription_expire")"
+				uci_set "gg" "$subscription_section" "expire" "$(date "+%Y-%m-%d %H:%M:%S" -d "@$subscription_expire")"
 			fi
 			if [ -n "$subscription_upload" ]; then
-				uci_set "momo" "$subscription_section" "upload" "$(format_filesize "$subscription_upload")"
+				uci_set "gg" "$subscription_section" "upload" "$(format_filesize "$subscription_upload")"
 			fi
 			if [ -n "$subscription_download" ]; then
-				uci_set "momo" "$subscription_section" "download" "$(format_filesize "$subscription_download")"
+				uci_set "gg" "$subscription_section" "download" "$(format_filesize "$subscription_download")"
 			fi
 			if [ -n "$subscription_total" ]; then
-				uci_set "momo" "$subscription_section" "total" "$(format_filesize "$subscription_total")"
+				uci_set "gg" "$subscription_section" "total" "$(format_filesize "$subscription_total")"
 			fi
 			if [ -n "$subscription_used" ]; then
-				uci_set "momo" "$subscription_section" "used" "$(format_filesize "$subscription_used")"
+				uci_set "gg" "$subscription_section" "used" "$(format_filesize "$subscription_used")"
 			fi
 			if [ -n "$subscription_avaliable" ]; then
-				uci_set "momo" "$subscription_section" "avaliable" "$(format_filesize "$subscription_avaliable")"
+				uci_set "gg" "$subscription_section" "avaliable" "$(format_filesize "$subscription_avaliable")"
 			fi
 		fi
-		uci_set "momo" "$subscription_section" "update" "$(date "+%Y-%m-%d %H:%M:%S")"
-		uci_set "momo" "$subscription_section" "success" "1"
+		uci_set "gg" "$subscription_section" "update" "$(date "+%Y-%m-%d %H:%M:%S")"
+		uci_set "gg" "$subscription_section" "success" "1"
 		# update subscription file
 		rm -f "$subscription_info_header_tmpfile"
 		rm -f "$subscription_header_tmpfile"
@@ -582,13 +582,13 @@ update_subscription() {
 	elif [ "$success" = 0 ]; then
 		log "Profile" "Subscription update failed."
 		# update subscription info
-		uci_set "momo" "$subscription_section" "success" "0"
+		uci_set "gg" "$subscription_section" "success" "0"
 		# remove tmpfile
 		rm -f "$subscription_info_header_tmpfile"
 		rm -f "$subscription_header_tmpfile"
 		rm -f "$subscription_tmpfile"
 	fi
-	uci_commit "momo"
+	uci_commit "gg"
 }
 
 update_core() {

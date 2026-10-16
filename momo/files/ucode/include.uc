@@ -2,7 +2,7 @@ import { readfile, writefile, popen } from 'fs';
 
 export function get_paths() {
 	let result = {};
-	const process = popen('. /etc/momo/scripts/include.sh && get_paths');
+	const process = popen('. /etc/gg/scripts/include.sh && get_paths');
 	if (process) {
 		result = json(process);
 		process.close();

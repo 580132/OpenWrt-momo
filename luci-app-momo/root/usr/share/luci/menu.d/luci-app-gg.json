@@ -1,28 +1,28 @@
 {
-    "admin/services/momo": {
-        "title": "Momo",
+    "admin/services/gg": {
+        "title": "GG",
         "action": {
             "type": "firstchild"
         },
         "depends": {
-            "acl": [ "luci-app-momo" ],
-            "uci": { "momo": true }
+            "acl": [ "luci-app-gg" ],
+            "uci": { "gg": true }
         }
     },
-    "admin/services/momo/core_update": {
+    "admin/services/gg/core_update": {
         "title": "Core Update",
         "order": 50,
         "action": {
             "type": "view",
-            "path": "momo/app"
+            "path": "gg/app"
         }
     },
-    "admin/services/momo/log": {
+    "admin/services/gg/log": {
         "title": "Log",
         "order": 60,
         "action": {
             "type": "view",
-            "path": "momo/log"
+            "path": "gg/log"
         }
     }
 }

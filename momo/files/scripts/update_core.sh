@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. "$IPKG_INSTROOT/etc/momo/scripts/include.sh"
+. "$IPKG_INSTROOT/etc/gg/scripts/include.sh"
 
 ## constants
 
@@ -185,9 +185,9 @@ install_package() {
 }
 
 restart_service() {
-	if /etc/init.d/momo status > /dev/null 2>&1; then
+	if /etc/init.d/gg status > /dev/null 2>&1; then
 		step "Restarting the service..."
-		if /etc/init.d/momo restart > /dev/null 2>&1; then
+		if /etc/init.d/gg restart > /dev/null 2>&1; then
 			step "Service restarted."
 		else
 			fail "Failed to restart the service, please check the app log."

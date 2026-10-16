@@ -1,11 +1,12 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=luci-app-momo-core
+PKG_NAME:=luci-app-gg
+LUCI_NAME:=luci-app-gg
 PKG_VERSION:=1.2.2
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
-LUCI_TITLE:=LuCI Support for momo (Core Only)
-LUCI_DEPENDS:=+luci-base +momo-core
+LUCI_TITLE:=LuCI Support for gg
+LUCI_DEPENDS:=+luci-base +gg
 
 include $(TOPDIR)/feeds/luci/luci.mk
 

@@ -239,6 +239,10 @@ msgstr ""
 msgid "Expire At"
 msgstr ""
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Expires:"
+msgstr ""
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/mixin.js:131
 msgid "External Control Config"
 msgstr ""
@@ -262,6 +266,11 @@ msgstr ""
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:325
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:31
 msgid "File:"
+msgstr ""
+
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "GG"
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:352
@@ -318,6 +327,10 @@ msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:110
 msgid "Inbound Interface"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Info URL"
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:105
@@ -397,6 +410,10 @@ msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/mixin.js:101
 msgid "NTP Server Port"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Never updated"
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:234
@@ -560,13 +577,29 @@ msgstr ""
 msgid "Subscription Name"
 msgstr ""
 
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Subscription URL"
+msgstr ""
+
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/profile.js:72
 msgid "Subscription Url"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Subscription update failed. Please check the app log for details."
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Subscription updated."
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/app.js:329
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/editor.js:35
 msgid "Subscription:"
+msgstr ""
+
+#: applications/luci-app-momo/htdocs/luci-static/resources/view/gg/app.js:1
+msgid "Subscriptions"
 msgstr ""
 
 #: applications/luci-app-momo/htdocs/luci-static/resources/view/momo/proxy.js:51

@@ -68,11 +68,11 @@ wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/feed.sh | a
 # 你可以从 shell 执行命令安装或者从 LuCI 的`软件包`菜单安装
 # for opkg
 opkg install momo
-opkg install luci-app-momo-core
+opkg install luci-app-gg
 opkg install luci-i18n-momo-zh-cn
 # for apk
 apk add momo
-apk add luci-app-momo-core
+apk add luci-app-gg
 apk add luci-i18n-momo-zh-cn
 ```
 
