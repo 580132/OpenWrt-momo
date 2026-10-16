@@ -271,20 +271,6 @@ return view.extend({
             });
         });
 
-        o = s.option(form.Button, 'reload');
-        o.inputstyle = 'action';
-        o.inputtitle = _('Reload Service');
-        o.onclick = function () {
-            return momo.reload();
-        };
-
-        o = s.option(form.Button, 'restart');
-        o.inputstyle = 'negative';
-        o.inputtitle = _('Restart Service');
-        o.onclick = function () {
-            return momo.restart();
-        };
-
 
         s = m.section(form.GridSection, 'subscription', _('Subscriptions'));
         s.addremove = true;
@@ -299,9 +285,11 @@ return view.extend({
 
         o = s.option(form.Value, 'info_url', _('Info URL'));
         o.optional = true;
+        o.modalonly = true;
 
         o = s.option(form.Value, 'user_agent', _('User Agent'));
         o.optional = true;
+        o.modalonly = true;
 
         o = s.option(form.ListValue, 'prefer', _('Prefer'));
         o.value('remote', _('Remote'));
@@ -416,6 +404,26 @@ return view.extend({
             o.value('subscription:' + subscription['.name'], _('Subscription:') + subscription.name);
         };
 
+
+        o = s.option(form.ListValue, 'core_channel', _('Core Channel'));
+        o.value('stable', _('Stable'));
+        o.value('preview', _('Preview'));
+        o.default = 'stable';
+        o.rmempty = false;
+        o = s.option(form.Button, 'reload');
+        o.inputstyle = 'action';
+        o.inputtitle = _('Reload Service');
+        o.onclick = function () {
+            return momo.reload();
+        };
+
+        o = s.option(form.Button, 'restart');
+        o.inputstyle = 'negative';
+        o.inputtitle = _('Restart Service');
+        o.onclick = function () {
+            return momo.restart();
+        };
+
         o = s.option(form.Value, 'start_delay', _('Start Delay'));
         o.datatype = 'uinteger';
         o.placeholder = _('Start Immidiately');
@@ -434,11 +442,6 @@ return view.extend({
         o = s.option(form.Flag, 'core_only', _('Core Only'));
         o.rmempty = false;
 
-        o = s.option(form.ListValue, 'core_channel', _('Core Channel'));
-        o.value('stable', _('Stable'));
-        o.value('preview', _('Preview'));
-        o.default = 'stable';
-        o.rmempty = false;
 
         s = m.section(form.NamedSection, 'procd', 'procd', _('procd Config'));
 
