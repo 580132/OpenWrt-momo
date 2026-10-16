@@ -71,18 +71,35 @@ function refreshSubscriptionStatus() {
         return momo.subscriptionStatus();
     }).then(function (statuses) {
         for (const section_id in statuses) {
-            // scope to the subscription grid so a modal popup, which may hold
-            // a container of its own for the same section, cannot shadow it
-            const cell = document.querySelector(
-                '#cbi-gg-subscription div[data-section-id="%s"] td[data-name="_stat"]'.format(section_id));
-            if (cell) {
-                cell.textContent = subscriptionStatusText(statuses[section_id]);
+            if (!updateSubscriptionStatusCell(section_id, statuses[section_id])) {
+                console.warn('gg: no subscription status cell for %s'.format(section_id));
             }
         }
-    }, function () {
+    }, function (error) {
         // the table is only a view of the stored state, a failed refresh must
-        // not turn a successful action into a reported error
+        // not turn a successful action into a reported error, but it has to be
+        // diagnosable when nothing updates
+        console.error('gg: subscription status refresh failed', error);
     });
+}
+
+// A rendered section carries its section id in a data-section-id attribute,
+// which is also how LuCI locates section elements itself (Map.findElement), and
+// the status cell is the one named after the option. GridSection derives from
+// TableSection, so the container is a table row with td cells. The same section
+// may be rendered more than once, in the table and in a modal popup, so pick
+// the container that actually holds the cell. textContent is written so the
+// value is never interpreted as markup.
+function updateSubscriptionStatusCell(section_id, fields) {
+    const containers = document.querySelectorAll('[data-section-id="%s"]'.format(section_id));
+    for (const container of containers) {
+        const cell = container.querySelector('td[data-name="_stat"]');
+        if (cell) {
+            cell.textContent = subscriptionStatusText(fields);
+            return true;
+        }
+    }
+    return false;
 }
 
 function refreshCoreInfo() {
