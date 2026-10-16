@@ -71,7 +71,10 @@ function refreshSubscriptionStatus() {
         return momo.subscriptionStatus();
     }).then(function (statuses) {
         for (const section_id in statuses) {
-            const cell = document.getElementById('sub_status_' + section_id);
+            // scope to the subscription grid so a modal popup, which may hold
+            // a container of its own for the same section, cannot shadow it
+            const cell = document.querySelector(
+                '#cbi-gg-subscription div[data-section-id="%s"] td[data-name="_stat"]'.format(section_id));
             if (cell) {
                 cell.textContent = subscriptionStatusText(statuses[section_id]);
             }
@@ -361,16 +364,19 @@ return view.extend({
         o.value('local', _('Local'));
 
         o = s.option(form.DummyValue, '_stat', _('Status'));
-        // table only: in the modal a second copy would duplicate the cell id
+        // table only: the modal renders a second copy of the row otherwise
         o.modalonly = false;
+        // A grid row renders a child option through renderTextValue() unless it
+        // is editable, and that one formats cfgvalue as text, so the value must
+        // stay a plain string. The refresh below patches the cell instead.
         o.cfgvalue = function (section_id) {
-            return E('span', { id: 'sub_status_' + section_id }, subscriptionStatusText({
+            return subscriptionStatusText({
                 success: uci.get('gg', section_id, 'success'),
                 update: uci.get('gg', section_id, 'update'),
                 used: uci.get('gg', section_id, 'used'),
                 total: uci.get('gg', section_id, 'total'),
                 expire: uci.get('gg', section_id, 'expire')
-            }));
+            });
         };
 
         o = s.option(form.Button, '_refresh');
