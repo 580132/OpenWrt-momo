@@ -58,6 +58,16 @@ config_core_channel=$(uci -q get gg.config.core_channel); [ -z "$config_core_cha
 # its type, so it needs a backing section just like the Status one does
 section_core_update=$(uci -q get gg.core_update); [ -z "$section_core_update" ] && uci set gg.core_update=core_update
 
+# subscription stub
+# early gg builds shipped an empty 'subscription' section. It renders as a row
+# with neither name nor url, so updating it can only fail. Drop it, but keep it
+# when it actually holds data.
+if [ "$(uci -q get gg.subscription)" = "subscription" ] &&
+	[ -z "$(uci -q get gg.subscription.name)" ] &&
+	[ -z "$(uci -q get gg.subscription.url)" ]; then
+	uci -q del gg.subscription
+fi
+
 # commit
 uci commit gg
 

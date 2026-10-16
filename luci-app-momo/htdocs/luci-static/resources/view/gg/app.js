@@ -325,6 +325,9 @@ return view.extend({
         };
 
         o = s.option(form.Button, '_refresh');
+        o.editable = true;
+        o.modalonly = false;
+        o.inputstyle = 'positive';
         o.inputtitle = _('Update');
         o.onclick = function (ev, section_id) {
             return report(
