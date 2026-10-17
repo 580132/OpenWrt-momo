@@ -31,11 +31,11 @@ uname -a
 if [ -x "/bin/opkg" ]; then
 	opkg list-installed "gg"
 	opkg list-installed "luci-app-gg"
-	opkg list-installed "luci-app-momo"
+	opkg list-installed "luci-app-gg"
 elif [ -x "/usr/bin/apk" ]; then
 	apk list -I "gg"
 	apk list -I "luci-app-gg"
-	apk list -I "luci-app-momo"
+	apk list -I "luci-app-gg"
 fi
 `
 \`\`\`

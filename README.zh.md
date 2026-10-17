@@ -2,23 +2,21 @@
 
 中文 | [English](README.md)
 
-# Momo
+# GG
 
-在 OpenWrt 上使用 sing-box 进行透明代理。
+在 OpenWrt 上运行 sing-box 核心：只做订阅管理与核心更新。
 
 ## 环境要求
 
-- OpenWrt >= 24.10
-- Linux Kernel >= 5.13
-- firewall4
+- OpenWrt 25.12（x86_64），本 fork 只构建这个目标
+- sing-box，来自 OpenWrt 或 ImmortalWrt 的软件源
 
 ## 功能
 
-- 透明代理 (Redirect/TPROXY/TUN, IPv4 和/或 IPv6)
-- 访问控制
-- 配置文件编辑器
+- 订阅管理（远程或本地）
+- 核心更新（稳定版 / 预览版 / 回滚）
 - 定时重启
-- 核心更新 (稳定版 / 预览版 / 回滚)
+- 应用日志、核心日志与调试日志
 
 ## 核心更新
 
@@ -42,11 +40,11 @@
 
 ```
 # 更新到最新稳定版
-/etc/init.d/momo update_core stable
+/etc/init.d/gg update_core stable
 # 更新到最新预览版
-/etc/init.d/momo update_core preview
+/etc/init.d/gg update_core preview
 # 回滚到上一个版本
-/etc/init.d/momo rollback_core
+/etc/init.d/gg rollback_core
 ```
 
 ## 安装和更新
@@ -67,13 +65,13 @@ wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/feed.sh | a
 ```shell
 # 你可以从 shell 执行命令安装或者从 LuCI 的`软件包`菜单安装
 # for opkg
-opkg install momo
+opkg install gg
 opkg install luci-app-gg
-opkg install luci-i18n-momo-zh-cn
+opkg install luci-i18n-gg-zh-cn
 # for apk
-apk add momo
+apk add gg
 apk add luci-app-gg
-apk add luci-i18n-momo-zh-cn
+apk add luci-i18n-gg-zh-cn
 ```
 
 ### B. 从发行版安装
@@ -91,18 +89,17 @@ wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/install-rel
 跳过签名校验。
 
 ```shell
-# 下载最新发行版的安装包
-wget https://github.com/580132/OpenWrt-momo/releases/latest/download/momo-2026.06.03-r2.apk
-wget https://github.com/580132/OpenWrt-momo/releases/latest/download/luci-app-momo-1.2.1-r2.apk
-wget https://github.com/580132/OpenWrt-momo/releases/latest/download/luci-i18n-momo-zh-cn-26.284.47581~d6a2dbc.apk
+# 文件名里带有版本号，请从发布页取当前的
+wget https://github.com/580132/OpenWrt-momo/releases/latest/download/gg-2026.10.14-r14.apk
+wget https://github.com/580132/OpenWrt-momo/releases/latest/download/luci-app-gg-1.2.2-r16.apk
+wget https://github.com/580132/OpenWrt-momo/releases/latest/download/luci-i18n-gg-<语言>-<版本>.apk
 
 # 安装
-apk add --allow-untrusted ./momo-2026.06.03-r2.apk \
-                       ./luci-app-momo-1.2.1-r2.apk \
-                       ./luci-i18n-momo-zh-cn-26.284.47581~d6a2dbc.apk
+apk add --allow-untrusted ./gg-2026.10.14-r14.apk \
+                       ./luci-app-gg-1.2.2-r16.apk
 ```
 
-`firewall4`、`sing-box` 等依赖仍会从 OpenWrt 官方软件源获取。
+`sing-box` 等依赖仍然从 OpenWrt 官方软件源获取。
 
 ## 卸载并重置
 
@@ -116,11 +113,10 @@ wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/uninstall.s
 
 ## 如何工作
 
-1. 启动 sing-box。
-2. 设置定时重启。
-3. 从配置文件读取必要的参数。
-4. 配置 IP 规则/路由。
-5. 生成防火墙配置并应用。
+1. 选择一个配置文件或订阅。
+2. 订阅为远程或文件缺失时先拉取订阅。
+3. 校验配置并用它启动 sing-box 核心。
+4. 按需设置定时重启与日志清理。
 
 注意上述步骤可能因配置而变动。
 
@@ -129,8 +125,8 @@ wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/uninstall.s
 `PKG_VERSION` 跟随上游版本，`PKG_RELEASE` 是本 fork 自己的修订号，每次发版递增。
 
 ```
-luci-app-momo  1.2.1-r2        (PKG_VERSION:=1.2.1, PKG_RELEASE:=2)
-momo           2026.06.03-r2
+luci-app-gg  1.2.2-r16        (PKG_VERSION:=1.2.2, PKG_RELEASE:=16)
+gg           2026.10.14-r14
 ```
 
 `-rN` 的排序高于上游的 `-r1`，因此包管理器会优先安装本仓库的构建产物，而不是上游的。
@@ -138,8 +134,8 @@ momo           2026.06.03-r2
 保留上游版本号是刻意的：一眼就能看出当前改动是基于哪个上游版本。
 
 **只要改动涉及包内文件，就必须递增 `PKG_RELEASE`。** 否则包版本号和用户已装的相同，
-包管理器会认为已是最新而直接跳过，新文件永远到不了设备。`momo`（`momo.conf`、`files/`）
-和 `luci-app-momo`（`htdocs/`、`root/`）需要各自独立递增。
+包管理器会认为已是最新而直接跳过，新文件永远到不了设备。`gg`（`gg.conf`、`files/`）
+和 `luci-app-gg`（`htdocs/`、`root/`）需要各自独立递增。
 
 典型症状是安装输出报成功、却没有任何升级行，例如只有 `OK: 230.0 MiB in 330 packages`
 而上面没有 `Upgrading ...`。
@@ -155,41 +151,35 @@ git fetch upstream
 git merge upstream/v1.2.1        # 或要同步的那个 tag
 
 # 2. 把两个 Makefile 的 PKG_VERSION 改成上游版本
-#      momo/Makefile          PKG_VERSION:=2026.06.03
-#      luci-app-momo/Makefile PKG_VERSION:=1.2.1
+#      gg/Makefile          PKG_VERSION:=2026.10.14
+#      luci-app-gg/Makefile PKG_VERSION:=1.2.2
 
 # 3. 把 PKG_RELEASE 重置为 2，表示基于该上游版本的第一次修改
 ```
 
 第 2 步最容易被漏掉。`1.2.1-r2` 高于 `1.2.1-r1`，但上游的 `1.2.2-r1` 无论你把
-`PKG_RELEASE` 调到多大都高于 `1.2.1-r2`；而且 `momo` 用的是日期版本号，上游每次
+`PKG_RELEASE` 调到多大都高于 `1.2.1-r2`；而且 `gg` 用的是日期版本号，上游每次
 发布都会变。
 
 ## 编译
 
 ```shell
 # 添加源
-echo "src-git momo https://github.com/580132/OpenWrt-momo.git;main" >> "feeds.conf.default"
+echo "src-git gg https://github.com/580132/OpenWrt-momo.git;main" >> "feeds.conf.default"
 # 更新并安装源
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 # 编译
-make package/luci-app-momo/compile
+make package/luci-app-gg/compile
 ```
 
-编译结果可以在`bin/packages/your_architecture/momo`内找到。
+编译结果可以在`bin/packages/your_architecture/gg`内找到。
 
 ## 依赖
 
 - ca-bundle
 - curl
-- firewall4
-- ip-full
-- kmod-inet-diag
-- kmod-nft-socket
-- kmod-nft-tproxy
-- kmod-tun
-- sing-box >= 1.12
+- sing-box
 
 ## 贡献者
 

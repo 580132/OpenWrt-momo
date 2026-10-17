@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# Momo's installer
+# GG's installer
 
 # check env
-if [[ ! -x "/bin/opkg" && ! -x "/usr/bin/apk" || ! -x "/sbin/fw4" ]]; then
-	echo "only supports OpenWrt build with firewall4!"
+if [ ! -x "/bin/opkg" ] && [ ! -x "/usr/bin/apk" ]; then
+	echo "only supports OpenWrt with opkg or apk!"
 	exit 1
 fi
 
@@ -43,7 +43,7 @@ fi
 
 # feed url
 repository_url="https://580132.github.io/OpenWrt-momo"
-feed_url="$repository_url/$branch/$arch/momo"
+feed_url="$repository_url/$branch/$arch/gg"
 
 if [ -x "/bin/opkg" ]; then
 	# update feeds
@@ -54,18 +54,18 @@ if [ -x "/bin/opkg" ]; then
 	languages=$(opkg list-installed luci-i18n-base-* | cut -d ' ' -f 1 | cut -d '-' -f 4-)
 	# get latest version
 	echo "get latest version"
-	wget -O momo.version $feed_url/index.json
+	wget -O gg.version $feed_url/index.json
 	# install ipks
 	echo "install ipks"
-	eval "$(jsonfilter -i momo.version -e "momo_version=@['packages']['momo']" -e "luci_app_momo_version=@['packages']['luci-app-momo']")"
-	opkg install "$feed_url/momo_${momo_version}_${arch}.ipk"
-	opkg install "$feed_url/luci-app-momo_${luci_app_momo_version}_all.ipk"
+	eval "$(jsonfilter -i gg.version -e "gg_version=@['packages']['gg']" -e "luci_app_gg_version=@['packages']['luci-app-gg']")"
+	opkg install "$feed_url/gg_${gg_version}_${arch}.ipk"
+	opkg install "$feed_url/luci-app-gg_${luci_app_gg_version}_all.ipk"
 	for lang in $languages; do
-		lang_version=$(jsonfilter -i momo.version -e "@['packages']['luci-i18n-momo-${lang}']")
-		opkg install "$feed_url/luci-i18n-momo-${lang}_${lang_version}_all.ipk"
+		lang_version=$(jsonfilter -i gg.version -e "@['packages']['luci-i18n-gg-${lang}']")
+		opkg install "$feed_url/luci-i18n-gg-${lang}_${lang_version}_all.ipk"
 	done
 	
-	rm -f momo.version
+	rm -f gg.version
 elif [ -x "/usr/bin/apk" ]; then
 	# update feeds
 	echo "update feeds"
@@ -75,9 +75,9 @@ elif [ -x "/usr/bin/apk" ]; then
 	languages=$(apk list --installed --manifest luci-i18n-base-* | cut -d ' ' -f 1 | cut -d '-' -f 4-)
 	# install apks from remote repository
 	echo "install apks from remote repository"
-	apk add --allow-untrusted -X $feed_url/packages.adb momo luci-app-momo
+	apk add --allow-untrusted -X $feed_url/packages.adb gg luci-app-gg
 	for lang in $languages; do
-		apk add --allow-untrusted -X $feed_url/packages.adb "luci-i18n-momo-${lang}"
+		apk add --allow-untrusted -X $feed_url/packages.adb "luci-i18n-gg-${lang}"
 	done
 fi
 

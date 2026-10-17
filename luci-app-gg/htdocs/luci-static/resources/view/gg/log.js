@@ -4,15 +4,15 @@
 'require uci';
 'require fs';
 'require poll';
-'require tools.gg as momo';
+'require tools.gg as gg';
 
 return view.extend({
     load: function () {
         return Promise.all([
             uci.load('gg'),
-            momo.getPaths(),
-            momo.getAppLog(),
-            momo.getCoreLog()
+            gg.getPaths(),
+            gg.getAppLog(),
+            gg.getCoreLog()
         ]);
     },
     render: function (data) {
@@ -60,7 +60,7 @@ return view.extend({
         o.inputtitle = _('Clear Log');
         o.onclick = function (ev, section_id) {
             m.lookupOption('_app_log', section_id)[0].getUIElement(section_id).setValue('');
-            return momo.clearAppLog();
+            return gg.clearAppLog();
         };
 
         o = s.taboption('app_log', form.TextValue, '_app_log');
@@ -74,7 +74,7 @@ return view.extend({
         };
         poll.add(L.bind(function () {
             const option = this;
-            return L.resolveDefault(momo.getAppLog()).then(function (log) {
+            return L.resolveDefault(gg.getAppLog()).then(function (log) {
                 option.getUIElement('log').setValue(log);
             });
         }, o));
@@ -93,7 +93,7 @@ return view.extend({
         o.inputtitle = _('Clear Log');
         o.onclick = function (ev, section_id) {
             m.lookupOption('_core_log', section_id)[0].getUIElement(section_id).setValue('');
-            return momo.clearCoreLog();
+            return gg.clearCoreLog();
         };
 
         o = s.taboption('core_log', form.TextValue, '_core_log');
@@ -107,7 +107,7 @@ return view.extend({
         };
         poll.add(L.bind(function () {
             const option = this;
-            return L.resolveDefault(momo.getCoreLog()).then(function (log) {
+            return L.resolveDefault(gg.getCoreLog()).then(function (log) {
                 option.getUIElement('log').setValue(log);
             });
         }, o));
@@ -125,7 +125,7 @@ return view.extend({
         o.inputstyle = 'negative';
         o.inputtitle = _('Generate & Download');
         o.onclick = function () {
-            return momo.debug().then(function () {
+            return gg.debug().then(function () {
                 fs.read_direct(paths.debug_log_path, 'blob').then(function (data) {
                     // create url
                     const url = window.URL.createObjectURL(data, { type: 'text/markdown' });

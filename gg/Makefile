@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gg
 PKG_VERSION:=2026.10.14
-PKG_RELEASE:=13
+PKG_RELEASE:=14
 
 PKG_LICENSE:=GPL-3.0+
 PKG_MAINTAINER:=Joseph Mory <morytyann@gmail.com>
@@ -38,16 +38,16 @@ define Package/gg/install
 
 
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_CONF) $(CURDIR)/files/momo.conf $(1)/etc/config/gg
+	$(INSTALL_CONF) $(CURDIR)/files/gg.conf $(1)/etc/config/gg
 
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) $(CURDIR)/files/momo.init $(1)/etc/init.d/gg
+	$(INSTALL_BIN) $(CURDIR)/files/gg.init $(1)/etc/init.d/gg
 
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) $(CURDIR)/files/uci-defaults/migrate.sh $(1)/etc/uci-defaults/99_migrate_gg
 
 	$(INSTALL_DIR) $(1)/lib/upgrade/keep.d
-	$(INSTALL_DATA) $(CURDIR)/files/momo.upgrade $(1)/lib/upgrade/keep.d/gg
+	$(INSTALL_DATA) $(CURDIR)/files/gg.upgrade $(1)/lib/upgrade/keep.d/gg
 endef
 
 define Package/gg/postrm

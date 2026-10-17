@@ -4,7 +4,7 @@
 'require uci';
 'require poll';
 'require ui';
-'require tools.gg as momo';
+'require tools.gg as gg';
 
 function renderStatus(running) {
     return updateStatus(E('input', { id: 'core_status', style: 'border: unset; font-style: italic; font-weight: bold;', readonly: '' }), running);
@@ -68,7 +68,7 @@ function subscriptionStatusText(fields) {
 // applied.
 function refreshSubscriptionStatus() {
     return guarded(function () {
-        return momo.subscriptionStatus();
+        return gg.subscriptionStatus();
     }).then(function (statuses) {
         for (const section_id in statuses) {
             if (!updateSubscriptionStatusCell(section_id, statuses[section_id])) {
@@ -104,7 +104,7 @@ function updateSubscriptionStatusCell(section_id, fields) {
 
 function refreshCoreInfo() {
     return guarded(function () {
-        return momo.coreInfo();
+        return gg.coreInfo();
     }).then(function (info) {
         updateCoreVersion(info.current_version ?? '');
     });
@@ -121,7 +121,7 @@ function errorMessage(error) {
 // the button settling back are the confirmation.
 function runCoreCheck(map, section_id, latestVersions) {
     return guarded(function () {
-        return momo.checkCoreUpdate();
+        return gg.checkCoreUpdate();
     }).then(function (versions) {
         latestVersions.stable = versions.stable ?? '';
         latestVersions.preview = versions.preview ?? '';
@@ -241,7 +241,7 @@ function trackCoreUpdate() {
 
         const poll = function () {
             guarded(function () {
-                return momo.coreUpdateStatus();
+                return gg.coreUpdateStatus();
             }).then(function (status) {
                 if (status.lines && status.lines.length) {
                     const text = status.lines.join('\n');
@@ -285,13 +285,13 @@ return view.extend({
     load: function () {
         return Promise.all([
             uci.load('gg'),
-            momo.version(),
-            momo.status(),
-            momo.listProfiles(),
+            gg.version(),
+            gg.status(),
+            gg.listProfiles(),
             // resolveDefault so that an unavailable procedure only costs the
             // Core Update section instead of aborting the whole page, which is
             // what Promise.all would do on a rejected call
-            L.resolveDefault(momo.coreInfo(), {})
+            L.resolveDefault(gg.coreInfo(), {})
         ]);
     },
     render: function (data) {
@@ -328,7 +328,7 @@ return view.extend({
             return renderStatus(running);
         };
         poll.add(function () {
-            return L.resolveDefault(momo.status()).then(function (running) {
+            return L.resolveDefault(gg.status()).then(function (running) {
                 updateStatus(document.getElementById('core_status'), running);
             });
         });
@@ -341,7 +341,7 @@ return view.extend({
             // of the rows changed too
             return report(
                 guarded(function () {
-                    return momo.reload();
+                    return gg.reload();
                 }).then(function () {
                     return refreshSubscriptionStatus();
                 }));
@@ -351,7 +351,7 @@ return view.extend({
         o.inputstyle = 'negative';
         o.inputtitle = _('Restart Service');
         o.onclick = function () {
-            return momo.restart();
+            return gg.restart();
         };
 
         s = m.section(form.GridSection, 'subscription', _('Subscriptions'));
@@ -406,7 +406,7 @@ return view.extend({
             // so no success notification, only failures are reported
             return report(
                 guarded(function () {
-                    return momo.updateSubscription(section_id);
+                    return gg.updateSubscription(section_id);
                 }).then(function (result) {
                     if (!result?.success) {
                         throw new Error(_('Subscription update failed. Please check the app log for details.'));
@@ -469,7 +469,7 @@ return view.extend({
                     confirmAction(confirmTitle, confirmMessage)
                         .then(function () {
                             return startCoreUpdate(guarded(function () {
-                                return momo.updateCore(channel);
+                                return gg.updateCore(channel);
                             }));
                         })
                         .then(function () {

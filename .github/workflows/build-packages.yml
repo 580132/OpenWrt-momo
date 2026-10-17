@@ -23,12 +23,12 @@ jobs:
         uses: openwrt/gh-action-sdk@main
         env:
           ARCH: ${{ matrix.arch }}-${{ matrix.branch }}
-          FEEDNAME: momo
-          PACKAGES: luci-app-momo
+          FEEDNAME: gg
+          PACKAGES: luci-app-gg
           NO_REFRESH_CHECK: true
 
       - name: upload
         uses: actions/upload-artifact@v7
         with:
-          name: momo_${{ matrix.arch }}-${{ matrix.branch }}
-          path: bin/packages/${{ matrix.arch }}/momo
+          name: gg_${{ matrix.arch }}-${{ matrix.branch }}
+          path: bin/packages/${{ matrix.arch }}/gg

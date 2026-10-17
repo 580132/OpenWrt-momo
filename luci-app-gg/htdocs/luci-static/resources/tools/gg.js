@@ -25,63 +25,63 @@ const callFileWrite = rpc.declare({
     params: ['path', 'data', 'append', 'mode']
 });
 
-const callMomoGetPaths = rpc.declare({
+const callGGGetPaths = rpc.declare({
     object: 'luci.gg',
     method: 'get_paths',
     expect: { '': {} }
 });
 
-const callMomoVersion = rpc.declare({
+const callGGVersion = rpc.declare({
     object: 'luci.gg',
     method: 'version',
     expect: { '': {} }
 });
 
-const callMomoUpdateSubscription = rpc.declare({
+const callGGUpdateSubscription = rpc.declare({
     object: 'luci.gg',
     method: 'update_subscription',
     params: ['section_id'],
     expect: { '': {} }
 });
 
-const callMomoSubscriptionStatus = rpc.declare({
+const callGGSubscriptionStatus = rpc.declare({
     object: 'luci.gg',
     method: 'subscription_status',
     expect: { '': {} }
 });
 
-const callMomoDebug = rpc.declare({
+const callGGDebug = rpc.declare({
     object: 'luci.gg',
     method: 'debug',
     expect: { '': {} }
 });
 
-const callMomoCoreInfo = rpc.declare({
+const callGGCoreInfo = rpc.declare({
     object: 'luci.gg',
     method: 'core_info',
     expect: { '': {} }
 });
 
-const callMomoCheckCoreUpdate = rpc.declare({
+const callGGCheckCoreUpdate = rpc.declare({
     object: 'luci.gg',
     method: 'check_core_update',
     expect: { '': {} }
 });
 
-const callMomoUpdateCore = rpc.declare({
+const callGGUpdateCore = rpc.declare({
     object: 'luci.gg',
     method: 'update_core',
     params: ['channel'],
     expect: { '': {} }
 });
 
-const callMomoRollbackCore = rpc.declare({
+const callGGRollbackCore = rpc.declare({
     object: 'luci.gg',
     method: 'rollback_core',
     expect: { '': {} }
 });
 
-const callMomoCoreUpdateStatus = rpc.declare({
+const callGGCoreUpdateStatus = rpc.declare({
     object: 'luci.gg',
     method: 'core_update_status',
     expect: { '': {} }
@@ -89,7 +89,7 @@ const callMomoCoreUpdateStatus = rpc.declare({
 
 return baseclass.extend({
     getPaths: async function () {
-        return callMomoGetPaths();
+        return callGGGetPaths();
     },
 
     status: async function () {
@@ -133,15 +133,15 @@ return baseclass.extend({
     },
 
     version: function () {
-        return callMomoVersion();
+        return callGGVersion();
     },
 
     updateSubscription: function (section_id) {
-        return callMomoUpdateSubscription(section_id);
+        return callGGUpdateSubscription(section_id);
     },
 
     subscriptionStatus: function () {
-        return callMomoSubscriptionStatus();
+        return callGGSubscriptionStatus();
     },
 
     
@@ -172,26 +172,26 @@ return baseclass.extend({
     },
 
     debug: function () {
-        return callMomoDebug();
+        return callGGDebug();
     },
 
     coreInfo: function () {
-        return callMomoCoreInfo();
+        return callGGCoreInfo();
     },
 
     checkCoreUpdate: function () {
-        return callMomoCheckCoreUpdate();
+        return callGGCheckCoreUpdate();
     },
 
     updateCore: function (channel) {
-        return callMomoUpdateCore(channel);
+        return callGGUpdateCore(channel);
     },
 
     rollbackCore: function () {
-        return callMomoRollbackCore();
+        return callGGRollbackCore();
     },
 
     coreUpdateStatus: function () {
-        return callMomoCoreUpdateStatus();
+        return callGGCoreUpdateStatus();
     },
 })

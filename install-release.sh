@@ -1,14 +1,14 @@
 #!/bin/sh
 
-# Momo's standalone installer
+# GG's standalone installer
 #
 # Downloads the packages straight from the GitHub release and installs them.
 # No feed is configured and no signing key is trusted, which is why the
 # packages have to be installed with --allow-untrusted.
 
 # check env
-if [[ ! -x "/bin/opkg" && ! -x "/usr/bin/apk" || ! -x "/sbin/fw4" ]]; then
-	echo "only supports OpenWrt build with firewall4!"
+if [ ! -x "/bin/opkg" ] && [ ! -x "/usr/bin/apk" ]; then
+	echo "only supports OpenWrt with opkg or apk!"
 	exit 1
 fi
 

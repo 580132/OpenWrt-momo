@@ -2,23 +2,21 @@
 
 English | [中文](README.zh.md)
 
-# Momo
+# GG
 
-Transparent Proxy with sing-box on OpenWrt.
+Runs the sing-box core on OpenWrt: subscriptions and core updates, nothing else.
 
 ## Prerequisites
 
-- OpenWrt >= 24.10
-- Linux Kernel >= 5.13
-- firewall4
+- OpenWrt 25.12 on x86_64, the only target this fork builds
+- sing-box, from the OpenWrt or ImmortalWrt package feed
 
 ## Feature
 
-- Transparent Proxy (Redirect/TPROXY/TUN, IPv4 and/or IPv6)
-- Access Control
-- Profile Editor
-- Scheduled Restart
+- Subscription management, remote or local
 - Core Update (stable / preview / rollback)
+- Scheduled Restart
+- App, core and debug logs
 
 ## Core Update
 
@@ -43,11 +41,11 @@ Notes:
 
 ```
 # update to the latest stable release
-/etc/init.d/momo update_core stable
+/etc/init.d/gg update_core stable
 # update to the latest preview release
-/etc/init.d/momo update_core preview
+/etc/init.d/gg update_core preview
 # roll back to the previous version
-/etc/init.d/momo rollback_core
+/etc/init.d/gg rollback_core
 ```
 
 ## Install & Update
@@ -69,13 +67,13 @@ wget -O - https://github.com/580132/OpenWrt-momo/raw/refs/heads/main/feed.sh | a
 ```shell
 # you can install from shell or `Software` menu in LuCI
 # for opkg
-opkg install momo
+opkg install gg
 opkg install luci-app-gg
-opkg install luci-i18n-momo-zh-cn
+opkg install luci-i18n-gg-zh-cn
 # for apk
-apk add momo
+apk add gg
 apk add luci-app-gg
-apk add luci-i18n-momo-zh-cn
+apk add luci-i18n-gg-zh-cn
 ```
 
 ### B. Install From Release
@@ -93,18 +91,17 @@ Use this if you would rather not add a feed. The packages published with each re
 are unsigned, so `--allow-untrusted` is required to skip signature verification.
 
 ```shell
-# download the packages of the latest release
-wget https://github.com/580132/OpenWrt-momo/releases/latest/download/momo-2026.06.03-r2.apk
-wget https://github.com/580132/OpenWrt-momo/releases/latest/download/luci-app-momo-1.2.1-r2.apk
-wget https://github.com/580132/OpenWrt-momo/releases/latest/download/luci-i18n-momo-zh-cn-26.284.47581~d6a2dbc.apk
+# the file names carry the version, take them from the release page
+wget https://github.com/580132/OpenWrt-momo/releases/latest/download/gg-2026.10.14-r14.apk
+wget https://github.com/580132/OpenWrt-momo/releases/latest/download/luci-app-gg-1.2.2-r16.apk
+wget https://github.com/580132/OpenWrt-momo/releases/latest/download/luci-i18n-gg-<language>-<version>.apk
 
 # install
-apk add --allow-untrusted ./momo-2026.06.03-r2.apk \
-                       ./luci-app-momo-1.2.1-r2.apk \
-                       ./luci-i18n-momo-zh-cn-26.284.47581~d6a2dbc.apk
+apk add --allow-untrusted ./gg-2026.10.14-r14.apk \
+                       ./luci-app-gg-1.2.2-r16.apk
 ```
 
-Dependencies such as `firewall4` and `sing-box` are still fetched from the official
+Dependencies such as `sing-box` are still fetched from the official
 OpenWrt repositories.
 
 ## Uninstall & Reset
@@ -119,11 +116,10 @@ See [Wiki](https://github.com/nikkinikki-org/OpenWrt-momo/wiki)
 
 ## How does it work
  
-1. Run sing-box.
-2. Set scheduled restart.
-3. Get neccesarry param from profile.
-4. Set ip rule/route.
-5. Generate firewall and apply it.
+1. Pick a profile file or a subscription.
+2. Fetch the subscription if it is remote or its file is missing.
+3. Validate the profile and run the sing-box core with it.
+4. Set up the scheduled restart and log clean up if enabled.
 
 Note that the steps above may change base on config.
 
@@ -133,8 +129,8 @@ Note that the steps above may change base on config.
 number and is incremented on every release.
 
 ```
-luci-app-momo  1.2.1-r2   (PKG_VERSION:=1.2.1, PKG_RELEASE:=2)
-momo           2026.06.03-r2
+luci-app-gg  1.2.2-r16   (PKG_VERSION:=1.2.2, PKG_RELEASE:=16)
+gg           2026.10.14-r14
 ```
 
 `-rN` sorts above the upstream `-r1`, so a package manager picks this build up instead
@@ -144,7 +140,7 @@ what tells you at a glance which upstream release the changes are based on.
 **Every change to a file that ships inside a package must bump `PKG_RELEASE`.**
 Without it the package keeps the version a user already has, the package manager
 reports it as up to date and skips it, and the new files never reach the device.
-This applies to `momo` (`momo.conf`, `files/`) and to `luci-app-momo` (`htdocs/`,
+This applies to `gg` (`gg.conf`, `files/`) and to `luci-app-gg` (`htdocs/`,
 `root/`), independently of each other.
 
 The symptom is an install that reports success but lists no upgrade, for example
@@ -162,41 +158,35 @@ git fetch upstream
 git merge upstream/v1.2.1        # or the tag of the release being synced
 
 # 2. move PKG_VERSION to the upstream version, in both Makefiles
-#      momo/Makefile          PKG_VERSION:=2026.06.03
-#      luci-app-momo/Makefile PKG_VERSION:=1.2.1
+#      gg/Makefile          PKG_VERSION:=2026.10.14
+#      luci-app-gg/Makefile PKG_VERSION:=1.2.2
 
 # 3. reset PKG_RELEASE to 2, the first revision on top of that upstream version
 ```
 
 Step 2 is the one to watch. `1.2.1-r2` outranks `1.2.1-r1`, but upstream's
 `1.2.2-r1` outranks `1.2.1-r2` no matter how large `PKG_RELEASE` grows, and
-`momo` uses a date based version that moves on every upstream release.
+`gg` uses a date based version that moves on every upstream release.
 
 ## Compilation
 
 ```shell
 # add feed
-echo "src-git momo https://github.com/580132/OpenWrt-momo.git;main" >> "feeds.conf.default"
+echo "src-git gg https://github.com/580132/OpenWrt-momo.git;main" >> "feeds.conf.default"
 # update & install feeds
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 # make package
-make package/luci-app-momo/compile
+make package/luci-app-gg/compile
 ```
 
-The package files will be found under `bin/packages/your_architecture/momo`.
+The package files will be found under `bin/packages/your_architecture/gg`.
 
 ## Dependencies
 
 - ca-bundle
 - curl
-- firewall4
-- ip-full
-- kmod-inet-diag
-- kmod-nft-socket
-- kmod-nft-tproxy
-- kmod-tun
-- sing-box >= 1.12
+- sing-box
 
 ## Contributors
 

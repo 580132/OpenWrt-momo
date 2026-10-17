@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# Momo's feed
+# GG's feed
 
 # check env
-if [[ ! -x "/bin/opkg" && ! -x "/usr/bin/apk" || ! -x "/sbin/fw4" ]]; then
-	echo "only supports OpenWrt build with firewall4!"
+if [ ! -x "/bin/opkg" ] && [ ! -x "/usr/bin/apk" ]; then
+	echo "only supports OpenWrt with opkg or apk!"
 	exit 1
 fi
 
@@ -43,7 +43,7 @@ fi
 
 # feed url
 repository_url="https://580132.github.io/OpenWrt-momo"
-feed_url="$repository_url/$branch/$arch/momo"
+feed_url="$repository_url/$branch/$arch/gg"
 
 if [ -x "/bin/opkg" ]; then
 	# add key
@@ -54,21 +54,21 @@ if [ -x "/bin/opkg" ]; then
 	rm -f "$key_build_pub_file"
 	# add feed
 	echo "add feed"
-	if grep -q momo /etc/opkg/customfeeds.conf; then
-		sed -i '/momo/d' /etc/opkg/customfeeds.conf
+	if grep -q '^src/gz gg ' /etc/opkg/customfeeds.conf; then
+		sed -i '/^src\/gz gg /d' /etc/opkg/customfeeds.conf
 	fi
-	echo "src/gz momo $feed_url" >> /etc/opkg/customfeeds.conf
+	echo "src/gz gg $feed_url" >> /etc/opkg/customfeeds.conf
 	# update feeds
 	echo "update feeds"
 	opkg update
 elif [ -x "/usr/bin/apk" ]; then
 	# add key
 	echo "add key"
-	wget -O "/etc/apk/keys/momo.pem" "$repository_url/public-key.pem"
+	wget -O "/etc/apk/keys/gg.pem" "$repository_url/public-key.pem"
 	# add feed
 	echo "add feed"
-	if grep -q momo /etc/apk/repositories.d/customfeeds.list; then
-		sed -i '/momo/d' /etc/apk/repositories.d/customfeeds.list
+	if grep -q '/gg/packages\.adb' /etc/apk/repositories.d/customfeeds.list; then
+		sed -i '\#/gg/packages\.adb#d' /etc/apk/repositories.d/customfeeds.list
 	fi
 	echo "$feed_url/packages.adb" >> /etc/apk/repositories.d/customfeeds.list
 	# update feeds
